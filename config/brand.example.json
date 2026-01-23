@@ -1,0 +1,69 @@
+{
+  "brand": {
+    "name": "Your Brand Name",
+    "siteTitle": "Your Site Title or Tagline",
+    "siteUrl": "https://yourdomain.com",
+    "description": "Your site description for SEO and social media sharing"
+  },
+  "colors": {
+    "primary": {
+      "DEFAULT": "#E00069",
+      "light": "#FFAED4",
+      "lighter": "#FFD7F1"
+    },
+    "secondary": {
+      "orange": {
+        "DEFAULT": "#ff7145",
+        "light": "#ff9769",
+        "lighter": "#ffc6be"
+      },
+      "yellow": {
+        "DEFAULT": "#fad630",
+        "light": "#ffc87b",
+        "lighter": "#fcf3b1"
+      },
+      "blue": {
+        "DEFAULT": "#4c53fb",
+        "light": "#b085ff",
+        "lighter": "#cfd6ff"
+      },
+      "teal": {
+        "DEFAULT": "#40c6ae",
+        "light": "#98edce",
+        "lighter": "#aae5e6"
+      }
+    },
+    "neutral": {
+      "50": "#fffdfd",
+      "100": "#f9f6f6",
+      "200": "#e4e0e0",
+      "300": "#d2cece",
+      "400": "#c0bcbc",
+      "500": "#a8a4a4",
+      "600": "#928c8c",
+      "700": "#746d6d",
+      "800": "#584f4f",
+      "900": "#443d3d",
+      "950": "#251f1f"
+    },
+    "ui": {
+      "background": "#fffdfd",
+      "backgroundAlt": "#fcf3b1",
+      "border": "#d3dce5",
+      "text": {
+        "primary": "#443d3d",
+        "secondary": "#584f4f",
+        "tertiary": "#a8a4a4",
+        "label": "#b7bfdc",
+        "accent": "#E00069"
+      }
+    }
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": "Inter",
+      "secondary": "Roboto",
+      "note": "Available in Google Fonts"
+    }
+  }
+}

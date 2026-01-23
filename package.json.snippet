@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "sync:meta": "node scripts/sync-meta.mjs",
+    "generate:og": "node scripts/generate-og.mjs",
+    "prebuild": "npm run sync:meta && npm run generate:og"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.0"
+  }
+}
