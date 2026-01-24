@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "sync:meta": "node scripts/sync-meta.mjs",
-    "sync:meta:nextjs": "node scripts/sync-meta-nextjs.mjs",
     "generate:og": "node scripts/generate-og.mjs",
     "test:ui:server": "node test-ui.mjs",
     "test:ui": "vite",
