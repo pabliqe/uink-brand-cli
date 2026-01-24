@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const rootDir = path.resolve(__dirname, '..')
 
-const brandPath = path.join(rootDir, 'config', 'brand.json')
+const brandPath = path.join(rootDir, 'brand.json')
 const htmlPath = path.join(rootDir, 'index.html')
 
 function escapeRegex(str) {

@@ -11,7 +11,7 @@ Automated OG image generation and meta tag synchronization based on your brand c
 cp -r scripts /path/to/your/project/
 
 # Copy the example brand config
-cp config/brand.example.json /path/to/your/project/config/brand.json
+cp brand.example.json /path/to/your/project/brand.json
 ```
 
 ### 2. Install Dependencies
@@ -34,7 +34,7 @@ npm install --save-dev @resvg/resvg-js
 
 ### 4. Configure Your Brand
 
-Edit `config/brand.json` with your brand colors, name, and site info.
+Edit `brand.json` with your brand colors, name, and site info.
 
 ### 5. Run
 
@@ -50,18 +50,17 @@ npm run build        # Both run automatically via prebuild
 your-project/
 ├── package.json          # Must have name & version
 ├── index.html            # HTML file with meta tags to update
-├── config/
-│   └── brand.json       # Your brand configuration
-├── scripts/             # Copy from this template
+├── brand.json            # Your brand configuration
+├── scripts/              # Copy from this template
 │   ├── generate-og.mjs
 │   └── sync-meta.mjs
-└── public/              # OG image outputs here
-    └── og-image.png     # Generated automatically
+└── public/               # OG image outputs here
+    └── og-image.png      # Generated automatically
 ```
 
 ## 🎨 Brand Configuration
 
-The `config/brand.json` file should include:
+The `brand.json` file should include:
 
 ```json
 {

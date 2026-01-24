@@ -14,7 +14,7 @@ async function loadJson(relativePath) {
 
 async function generateOgImage() {
   const pkg = await loadJson('package.json')
-  const brand = await loadJson('config/brand.json')
+  const brand = await loadJson('brand.json')
 
   const siteName = brand?.brand?.name || pkg?.name || 'UINK'
   const siteTitle = brand?.brand?.siteTitle || brand?.brand?.name || 'UINK WEB'

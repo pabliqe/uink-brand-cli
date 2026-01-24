@@ -11,8 +11,7 @@ cp -r /path/to/og-brand-template/scripts your-project/
 ### 2. Copy Config Template
 
 ```bash
-mkdir -p your-project/config
-cp /path/to/og-brand-template/config/brand.example.json your-project/config/brand.json
+cp /path/to/og-brand-template/brand.example.json your-project/brand.json
 ```
 
 ### 3. Install Dependency
@@ -72,7 +71,7 @@ Make sure your `index.html` contains these meta tags:
 
 ### 6. Configure Your Brand
 
-Edit `config/brand.json` with your actual brand information:
+Edit `brand.json` with your actual brand information:
 
 ```json
 {
@@ -115,7 +114,7 @@ You can also use this as a Git remote:
 git remote add og-template /path/to/og-brand-template
 git fetch og-template
 git checkout og-template/main -- scripts/
-git checkout og-template/main -- config/brand.example.json
+git checkout og-template/main -- brand.example.json
 ```
 
 ### Pull Updates Later
@@ -145,8 +144,8 @@ Edit `scripts/sync-meta.mjs` to sync additional meta tags using the `replaceMeta
 ### "Cannot find module '@resvg/resvg-js'"
 Install the dependency: `npm install --save-dev @resvg/resvg-js`
 
-### "ENOENT: no such file or directory 'config/brand.json'"
-Copy the example: `cp config/brand.example.json config/brand.json`
+### "ENOENT: no such file or directory 'brand.json'"
+Copy the example: `cp brand.example.json brand.json`
 
 ### OG image not showing on social media
 1. Ensure `siteUrl` in brand.json is correct
