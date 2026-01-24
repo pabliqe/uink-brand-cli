@@ -10,12 +10,14 @@ const API_PORT = 3000
 
 app.use(express.json({ limit: '50mb' }))
 
-// Load package.json for version
+// Load package.json for version (optional, fallback to 0.0.0)
 async function getPackageVersion() {
   try {
-    const pkg = JSON.parse(await readFile(path.join(__dirname, 'package.json'), 'utf8'))
+    const pkgPath = path.join(__dirname, 'package.json')
+    const pkg = JSON.parse(await readFile(pkgPath, 'utf8'))
     return pkg.version || '0.0.0'
-  } catch {
+  } catch (error) {
+    // package.json not found or invalid JSON - use default
     return '0.0.0'
   }
 }
