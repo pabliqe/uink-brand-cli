@@ -2,20 +2,6 @@
 
 Automated OG image generation and meta tag synchronization based on your brand configuration.
 
-## 🎨 Test UI with Vite
-
-**Want to preview before deploying?** Use the interactive Vite-powered test UI with hot module reloading:
-
-```bash
-npm install
-npm run test:ui:server  # Terminal 1: Start API on port 3000
-npm run test:ui         # Terminal 2: Start Vite on port 5173
-```
-
-Open `http://localhost:5173` to test brand configurations with live preview.
-
-See [TEST-UI.md](TEST-UI.md) for full documentation.
-
 ## 🚀 Quick Start
 
 ### 1. Copy to Your Project
