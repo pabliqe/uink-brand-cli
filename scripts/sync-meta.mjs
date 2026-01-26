@@ -207,7 +207,14 @@ async function syncMeta() {
   }
 
   // Read brand config
-  const brandRaw = await readFile(brandPath, 'utf8')
+  const finalBrandPath = existsSync(brandPath) ? brandPath : path.join(rootDir, 'brand.example.json')
+  
+  if (!existsSync(finalBrandPath)) {
+    console.error(`[sync-meta] ✗ No brand.json or brand.example.json found`)
+    process.exit(1)
+  }
+
+  const brandRaw = await readFile(finalBrandPath, 'utf8')
   const brand = JSON.parse(brandRaw)
 
   const siteUrl = (brand?.brand?.siteUrl || '').replace(/\/$/, '')

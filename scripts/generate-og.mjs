@@ -31,6 +31,7 @@ function detectOutDir() {
 
 async function loadJson(relativePath) {
   const filePath = path.join(rootDir, relativePath)
+  if (!existsSync(filePath)) return null
   const raw = await readFile(filePath, 'utf8')
   return JSON.parse(raw)
 }
@@ -58,7 +59,12 @@ function wrapText(text, maxChars) {
 
 async function generateOgImage() {
   const pkg = await loadJson('package.json')
-  const brand = await loadJson('brand.json')
+  const brand = await loadJson('brand.json') || await loadJson('brand.example.json')
+
+  if (!brand) {
+    console.error('[og-image] ✗ No brand.json or brand.example.json found')
+    process.exit(1)
+  }
 
   const siteName = brand?.brand?.name || pkg?.name || 'UINK'
   const siteTitle = brand?.brand?.siteTitle || brand?.brand?.name || 'UINK WEB'
