@@ -37,6 +37,26 @@ async function loadJson(relativePath) {
 }
 
 /**
+ * Helper to get value from standard JSON or DTCG ($value) format
+ */
+function getValue(obj, path, defaultValue) {
+  const parts = path.split('.')
+  let current = obj
+  
+  for (const part of parts) {
+    if (current == null) return defaultValue
+    current = current[part]
+  }
+
+  // If it's DTCG format, extract the $value property
+  if (current && typeof current === 'object' && '$value' in current) {
+    return current.$value
+  }
+  
+  return current ?? defaultValue
+}
+
+/**
  * Simple word wrap for SVG text
  */
 function wrapText(text, maxChars) {
@@ -59,22 +79,23 @@ function wrapText(text, maxChars) {
 
 async function generateOgImage() {
   const pkg = await loadJson('package.json')
-  const brand = await loadJson('brand.json') || await loadJson('brand.example.json')
+  // Try tokens.json first (DTCG standard), then brand.json (legacy)
+  const brand = await loadJson('tokens.json') || await loadJson('brand.json')
 
   if (!brand) {
-    console.error('[og-image] ✗ No brand.json or brand.example.json found')
+    console.error('[og-image] ✗ No tokens.json or brand.json found')
     process.exit(1)
   }
 
-  const siteName = brand?.brand?.name || pkg?.name || 'UINK'
-  const siteTitle = brand?.brand?.siteTitle || brand?.brand?.name || 'UINK WEB'
+  const siteName = getValue(brand, 'brand.name', pkg?.name || 'UINK')
+  const siteTitle = getValue(brand, 'brand.siteTitle', getValue(brand, 'brand.name', 'UINK WEB'))
   const versionLabel = pkg?.version ? `v${pkg.version}` : 'v0.0.0'
 
   const colors = {
-    primary: brand?.colors?.primary?.DEFAULT || '#E00069',
-    accent: brand?.colors?.ui?.text?.accent || brand?.colors?.secondary?.blue?.DEFAULT || '#4c53fb',
-    neutralBg: brand?.colors?.ui?.background || '#fffdfd',
-    text: brand?.colors?.ui?.text?.primary || '#443d3d'
+    primary: getValue(brand, 'colors.primary.DEFAULT', '#E00069'),
+    accent: getValue(brand, 'colors.ui.text.accent', getValue(brand, 'colors.secondary.blue.DEFAULT', '#4c53fb')),
+    neutralBg: getValue(brand, 'colors.ui.background', '#fffdfd'),
+    text: getValue(brand, 'colors.ui.text.primary', '#443d3d')
   }
 
   const width = 1200

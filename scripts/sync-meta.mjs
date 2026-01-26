@@ -6,7 +6,28 @@ import { existsSync } from 'fs'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const rootDir = path.resolve(__dirname, '..')
 
+const tokensPath = path.join(rootDir, 'tokens.json')
 const brandPath = path.join(rootDir, 'brand.json')
+
+/**
+ * Helper to get value from standard JSON or DTCG ($value) format
+ */
+function getValue(obj, path, defaultValue) {
+  const parts = path.split('.')
+  let current = obj
+  
+  for (const part of parts) {
+    if (current == null) return defaultValue
+    current = current[part]
+  }
+
+  // If it's DTCG format, extract the $value property
+  if (current && typeof current === 'object' && '$value' in current) {
+    return current.$value
+  }
+  
+  return current ?? defaultValue
+}
 
 // ============================================================================
 // FRAMEWORK DETECTION
@@ -89,9 +110,9 @@ async function detectFramework() {
 // ============================================================================
 
 function generateAppRouterMetadata(brand, ogImageUrl) {
-  const siteName = brand?.brand?.name || 'My Site'
-  const siteTitle = brand?.brand?.siteTitle || siteName
-  const siteDescription = brand?.brand?.description || 'Welcome to my site'
+  const siteName = getValue(brand, 'brand.name', 'My Site')
+  const siteTitle = getValue(brand, 'brand.siteTitle', siteName)
+  const siteDescription = getValue(brand, 'brand.description', 'Welcome to my site')
 
   return `export const metadata: Metadata = {
   title: '${siteName}',
@@ -171,8 +192,8 @@ function replaceMeta(html, attr, key, value) {
 }
 
 async function updateStaticHtml(filePath, brand, ogImageUrl) {
-  const siteName = brand?.brand?.name || 'UINK WEB'
-  const siteDescription = brand?.brand?.description || 'Sistema gráfico - Design system for UINK WEB'
+  const siteName = getValue(brand, 'brand.name', 'UINK WEB')
+  const siteDescription = getValue(brand, 'brand.description', 'Sistema gráfico - Design system for UINK WEB')
 
   const html = await readFile(filePath, 'utf8')
 
@@ -206,18 +227,18 @@ async function syncMeta() {
     process.exit(1)
   }
 
-  // Read brand config
-  const finalBrandPath = existsSync(brandPath) ? brandPath : path.join(rootDir, 'brand.example.json')
+  // Read tokens config (try tokens.json first, then brand.json)
+  const configPath = existsSync(tokensPath) ? tokensPath : brandPath
   
-  if (!existsSync(finalBrandPath)) {
-    console.error(`[sync-meta] ✗ No brand.json or brand.example.json found`)
+  if (!existsSync(configPath)) {
+    console.error(`[sync-meta] ✗ No tokens.json or brand.json found`)
     process.exit(1)
   }
 
-  const brandRaw = await readFile(finalBrandPath, 'utf8')
+  const brandRaw = await readFile(configPath, 'utf8')
   const brand = JSON.parse(brandRaw)
 
-  const siteUrl = (brand?.brand?.siteUrl || '').replace(/\/$/, '')
+  const siteUrl = getValue(brand, 'brand.siteUrl', '').replace(/\/$/, '')
   const ogImageUrl = siteUrl ? `${siteUrl}/og-image.png` : '/og-image.png'
 
   if (detection.type === 'nextjs') {

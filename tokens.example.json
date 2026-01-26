@@ -1,0 +1,192 @@
+{
+  "brand": {
+    "name": {
+      "$value": "Your Brand Name",
+      "$type": "string"
+    },
+    "siteTitle": {
+      "$value": "Your Site Title or Tagline",
+      "$type": "string"
+    },
+    "siteUrl": {
+      "$value": "https://yourdomain.com",
+      "$type": "string"
+    },
+    "description": {
+      "$value": "Your site description for SEO and social media sharing",
+      "$type": "string"
+    }
+  },
+  "colors": {
+    "primary": {
+      "DEFAULT": {
+        "$value": "#E00069",
+        "$type": "color"
+      },
+      "light": {
+        "$value": "#FFAED4",
+        "$type": "color"
+      },
+      "lighter": {
+        "$value": "#FFD7F1",
+        "$type": "color"
+      }
+    },
+    "secondary": {
+      "orange": {
+        "DEFAULT": {
+          "$value": "#ff7145",
+          "$type": "color"
+        },
+        "light": {
+          "$value": "#ff9769",
+          "$type": "color"
+        },
+        "lighter": {
+          "$value": "#ffc6be",
+          "$type": "color"
+        }
+      },
+      "yellow": {
+        "DEFAULT": {
+          "$value": "#fad630",
+          "$type": "color"
+        },
+        "light": {
+          "$value": "#ffc87b",
+          "$type": "color"
+        },
+        "lighter": {
+          "$value": "#fcf3b1",
+          "$type": "color"
+        }
+      },
+      "blue": {
+        "DEFAULT": {
+          "$value": "#4c53fb",
+          "$type": "color"
+        },
+        "light": {
+          "$value": "#b085ff",
+          "$type": "color"
+        },
+        "lighter": {
+          "$value": "#cfd6ff",
+          "$type": "color"
+        }
+      },
+      "teal": {
+        "DEFAULT": {
+          "$value": "#40c6ae",
+          "$type": "color"
+        },
+        "light": {
+          "$value": "#98edce",
+          "$type": "color"
+        },
+        "lighter": {
+          "$value": "#aae5e6",
+          "$type": "color"
+        }
+      }
+    },
+    "neutral": {
+      "50": {
+        "$value": "#fffdfd",
+        "$type": "color"
+      },
+      "100": {
+        "$value": "#f9f6f6",
+        "$type": "color"
+      },
+      "200": {
+        "$value": "#e4e0e0",
+        "$type": "color"
+      },
+      "300": {
+        "$value": "#d2cece",
+        "$type": "color"
+      },
+      "400": {
+        "$value": "#c0bcbc",
+        "$type": "color"
+      },
+      "500": {
+        "$value": "#a8a4a4",
+        "$type": "color"
+      },
+      "600": {
+        "$value": "#928c8c",
+        "$type": "color"
+      },
+      "700": {
+        "$value": "#746d6d",
+        "$type": "color"
+      },
+      "800": {
+        "$value": "#584f4f",
+        "$type": "color"
+      },
+      "900": {
+        "$value": "#443d3d",
+        "$type": "color"
+      },
+      "950": {
+        "$value": "#251f1f",
+        "$type": "color"
+      }
+    },
+    "ui": {
+      "background": {
+        "$value": "#fffdfd",
+        "$type": "color"
+      },
+      "backgroundAlt": {
+        "$value": "#fcf3b1",
+        "$type": "color"
+      },
+      "border": {
+        "$value": "#d3dce5",
+        "$type": "color"
+      },
+      "text": {
+        "primary": {
+          "$value": "#443d3d",
+          "$type": "color"
+        },
+        "secondary": {
+          "$value": "#584f4f",
+          "$type": "color"
+        },
+        "tertiary": {
+          "$value": "#a8a4a4",
+          "$type": "color"
+        },
+        "label": {
+          "$value": "#b7bfdc",
+          "$type": "color"
+        },
+        "accent": {
+          "$value": "#E00069",
+          "$type": "color"
+        }
+      }
+    }
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": {
+        "$value": "Inter",
+        "$type": "string"
+      },
+      "secondary": {
+        "$value": "Roboto",
+        "$type": "string"
+      },
+      "note": {
+        "$value": "Available in Google Fonts",
+        "$type": "string"
+      }
+    }
+  }
+}
