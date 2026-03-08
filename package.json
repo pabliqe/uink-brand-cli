@@ -1,23 +1,51 @@
 {
-  "name": "og-brand-template",
+  "name": "@pabliqe/og-brand-cli",
   "version": "1.0.0",
-  "description": "OG Image & Brand Meta Generator - Automated OG image generation and meta tag synchronization",
+  "description": "Zero-config CLI tool for generating PWA assets, Open Graph images, and meta tags from DTCG design tokens",
   "type": "module",
+  "bin": {
+    "og-brand": "./bin/cli.js"
+  },
   "scripts": {
-    "sync:meta": "node scripts/sync-meta.mjs",
-    "generate:og": "node scripts/generate-og.mjs",
-    "prebuild": "npm run sync:meta && npm run generate:og"
+    "test": "node bin/cli.js",
+    "prepublishOnly": "echo 'Ready to publish'"
   },
   "keywords": [
     "og-image",
     "meta-tags",
-    "brand",
+    "pwa",
+    "manifest",
+    "design-tokens",
+    "dtcg",
+    "seo",
+    "social-media",
+    "cli",
     "generator",
-    "social-media"
+    "brand",
+    "favicon"
   ],
-  "author": "",
+  "author": "Pablo Armen <pabliqe@github>",
   "license": "MIT",
-  "devDependencies": {
-    "@resvg/resvg-js": "^2.6.0"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pabliqe/og-brand-template.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pabliqe/og-brand-template/issues"
+  },
+  "homepage": "https://github.com/pabliqe/og-brand-template#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "templates/",
+    "README.md",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "@resvg/resvg-js": "^2.6.0",
+    "satori": "^0.10.0"
   }
 }
