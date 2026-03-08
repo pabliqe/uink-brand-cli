@@ -248,5 +248,5 @@ The first stable release of OG Brand CLI - a zero-config tool for generating PWA
 
 ---
 
-[Unreleased]: https://github.com/pabliqe/og-brand-template/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/pabliqe/og-brand-template/releases/tag/v1.0.0
+[Unreleased]: https://github.com/pabliqe/uink-brand-cli/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/pabliqe/uink-brand-cli/releases/tag/v1.0.0

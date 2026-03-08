@@ -44,8 +44,8 @@ Feature suggestions are welcome! Please:
 
 ```bash
 # Clone your fork
-git clone https://github.com/YOUR_USERNAME/og-brand-template.git
-cd og-brand-template
+git clone https://github.com/YOUR_USERNAME/uink-brand-cli.git
+cd uink-brand-cli
 
 # Install dependencies
 npm install
@@ -79,7 +79,7 @@ ls -la .og-brand/
 ## 🏗️ Project Structure
 
 ```
-og-brand-template/
+uink-brand-cli/
 ├── bin/
 │   └── cli.js              # Main CLI entry point
 ├── lib/

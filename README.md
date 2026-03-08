@@ -1,6 +1,6 @@
-# 🎨 OG Brand CLI
+# 🎨 UINK Brand CLI
 
-[![npm version](https://img.shields.io/npm/v/@pabliqe/og-brand-cli.svg)](https://www.npmjs.com/package/@pabliqe/og-brand-cli)
+[![npm version](https://img.shields.io/npm/v/@pabliqe/uink-brand-cli.svg)](https://www.npmjs.com/package/@pabliqe/uink-brand-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 **Zero-config CLI tool for generating PWA assets, Open Graph images, and meta tags from DTCG design tokens.**
@@ -24,13 +24,13 @@ Transform your design tokens into production-ready assets with a single command.
 
 ```bash
 # Run directly with npx (no installation required)
-npx @pabliqe/og-brand-cli
+npx @pabliqe/uink-brand-cli
 
 # Or install globally
-npm install -g @pabliqe/og-brand-cli
+npm install -g @pabliqe/uink-brand-cli
 
 # Or as a dev dependency
-npm install --save-dev @pabliqe/og-brand-cli
+npm install --save-dev @pabliqe/uink-brand-cli
 ```
 
 ### Usage
@@ -382,21 +382,55 @@ jobs:
    - Publish release
    - GitHub Actions will automatically publish to npm
 
-## 🛠️ Development
+## 🛠️ Development & Local Usage
+
+### Using Locally Without npm Publishing
 
 ```bash
 # Clone the repository
-git clone https://github.com/pabliqe/og-brand-template.git
-cd og-brand-template
+git clone https://github.com/pabliqe/uink-brand-cli.git
+cd uink-brand-cli
 
 # Install dependencies
 npm install
 
-# Test locally
+# Test locally (run the CLI on this project)
 npm test
 
-# Run CLI in development
+# Run CLI in development mode
 node bin/cli.js --help
+
+# Use the local CLI in another project
+# Option 1: Run directly with node
+node /path/to/uink-brand-cli/bin/cli.js
+
+# Option 2: Create a symlink for global access
+cd /path/to/uink-brand-cli
+npm link
+cd /path/to/your-project
+cd your-project && og-brand
+
+# Option 3: Reference as a local dependency in package.json
+# In your project's package.json:
+"devDependencies": {
+  "@pabliqe/uink-brand-cli": "file:../uink-brand-cli"
+}
+# Then run: npm install && npm run build
+```
+
+### From npm Registry
+
+```bash
+# Install as dev dependency
+npm install --save-dev @pabliqe/uink-brand-cli
+
+# Install globally
+npm install -g @pabliqe/uink-brand-cli
+
+# Use in your project
+npm run build  # if configured in package.json
+# or
+npx uink-brand-cli
 ```
 
 ## 📝 Examples
@@ -423,8 +457,8 @@ MIT © Pablo
 
 ## 🔗 Links
 
-- [GitHub Repository](https://github.com/pabliqe/og-brand-template)
-- [npm Package](https://www.npmjs.com/package/@pabliqe/og-brand-cli)
+- [GitHub Repository](https://github.com/pabliqe/uink-brand-cli)
+- [npm Package](https://www.npmjs.com/package/@pabliqe/uink-brand-cli)
 - [Design Tokens Community Group](https://tr.designtokens.org/)
 - [Open Graph Protocol](https://ogp.me/)
 

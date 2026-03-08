@@ -1,10 +1,10 @@
 {
-  "name": "@pabliqe/og-brand-cli",
+  "name": "@pabliqe/uink-brand-cli",
   "version": "1.0.0",
   "description": "Zero-config CLI tool for generating PWA assets, Open Graph images, and meta tags from DTCG design tokens",
   "type": "module",
   "bin": {
-    "og-brand": "./bin/cli.js"
+    "uink-brand": "./bin/cli.js"
   },
   "scripts": {
     "test": "node bin/cli.js",
@@ -28,12 +28,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pabliqe/og-brand-template.git"
+    "url": "https://github.com/pabliqe/uink-brand-cli.git"
   },
   "bugs": {
-    "url": "https://github.com/pabliqe/og-brand-template/issues"
+    "url": "https://github.com/pabliqe/uink-brand-cli/issues"
   },
-  "homepage": "https://github.com/pabliqe/og-brand-template#readme",
+  "homepage": "https://github.com/pabliqe/uink-brand-cli#readme",
   "engines": {
     "node": ">=18.0.0"
   },

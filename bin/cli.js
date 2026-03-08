@@ -117,7 +117,7 @@ BRAND.JSON FORMAT:
   Fallback: If brand.name/description are missing, reads from package.json
 
 MORE INFO:
-  https://github.com/pabliqe/og-brand-template
+  https://github.com/pabliqe/uink-brand-cli
 `)
 }
 
