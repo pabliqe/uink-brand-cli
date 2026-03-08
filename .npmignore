@@ -1,0 +1,32 @@
+# Only include necessary files in npm package
+*.md
+!README.md
+!LICENSE
+
+# Development files
+.github/
+.vscode/
+.idea/
+examples/
+scripts/
+
+# Test files
+test/
+tests/
+*.test.js
+*.spec.js
+
+# Configuration files
+.eslintrc*
+.prettierrc*
+tsconfig.json
+.editorconfig
+
+# Examples and documentation
+brand.example.json
+tokens.example.json
+
+# Build artifacts
+node_modules/
+public/
+.og-brand/
