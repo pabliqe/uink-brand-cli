@@ -1,53 +1,57 @@
-# Example Files - How to Use the Metadata API
+# Usage Examples
 
-This folder contains real-world example files showing how to implement OG meta tags in your Next.js project.
+This directory contains practical examples showing how to integrate OG Brand CLI into various frameworks.
 
-## App Router (Recommended for Next.js 13+)
+## Examples
 
-See `nextjs-app-router-layout.tsx` for an example of using the **Metadata API** in `app/layout.tsx`.
+### 1. Next.js App Router
+See [nextjs-app-router-layout.tsx](./nextjs-app-router-layout.tsx) for the full implementation.
 
-### Key Features
+**Key points:**
+- Import metadata object from generated file
+- Export as named export
+- Next.js automatically handles meta tag injection
 
-- ✅ Type-safe with TypeScript
-- ✅ Server-side only (no client bundle)
-- ✅ Supports all Open Graph and Twitter properties
-- ✅ Easy to generate dynamically
+### 2. Next.js Pages Router
+See [nextjs-pages-router-document.tsx](./nextjs-pages-router-document.tsx) for the full implementation.
 
-### How to Use
+**Key points:**
+- Import BrandMeta component in `_document.tsx`
+- Place inside `<Head>` component
+- Custom document applies to all pages
 
-1. Copy the metadata object from the example
-2. Paste it into your `app/layout.tsx`
-3. Replace values with your brand info from `brand.json`
-4. Or run: `npm run sync:meta` to auto-generate it
+### 3. Using Custom Assets
 
-### Example Usage
+**Want to use your own logo or custom OG image?**
 
-```typescript
-// app/layout.tsx
-import type { Metadata } from 'next'
+1. **Place your custom files** in the output directory:
+   ```bash
+   mkdir -p public
+   cp my-logo.png public/favicon.ico
+   cp my-og-image.jpg public/og-image.jpg
+   cp my-apple-icon.png public/apple-touch-icon.png
+   ```
 
-export const metadata: Metadata = {
-  title: 'Your Brand Name',
-  description: 'Your brand description',
-  openGraph: {
-    title: 'Your Site Title',
-    description: 'Your brand description',
-    images: [
-      {
-        url: 'https://yourdomain.com/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'Your Brand',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Your Site Title',
-    images: ['https://yourdomain.com/og-image.png'],
-  },
-}
+2. **Run the CLI** - it automatically detects and preserves your files:
+   ```bash
+   npx @pabliqe/og-brand-cli
+   ```
+   
+   Output:
+   ```
+   🖼️  [2/4] Generating assets...
+      ⊙ og-image.jpg (using existing)
+      ⊙ favicon.ico (using existing)
+      ✓ icon-192x192.png (192x192)
+      ...
+   ```
 
+3. **Result**: Your custom assets + auto-generated PWA icons + full meta tags!
+
+**Tips:**
+- Mix and match freely (e.g., custom OG image + auto-generated icons)
+- Use `--force` to regenerate everything: `og-brand --force`
+- Manifest and meta tags always reference the correct files
 export default function RootLayout({ children }) {
   return (
     <html>
