@@ -34,7 +34,7 @@ See [nextjs-pages-router-document.tsx](./nextjs-pages-router-document.tsx) for t
 
 2. **Run the CLI** - it automatically detects and preserves your files:
    ```bash
-  npx @pabliqe/uink-brand-cli
+  npx uink-brand-cli
    ```
    
    Output:

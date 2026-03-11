@@ -44,5 +44,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               commit_sha: release.target_commitish,
-              body: `✅ Successfully published version ${release.tag_name} to npm!\n\nInstall with:\n\`\`\`bash\nnpm install @pabliqe/uink-brand-cli@${release.tag_name}\n\`\`\``
+              body: `✅ Successfully published version ${release.tag_name} to npm!\n\nInstall with:\n\`\`\`bash\nnpm install uink-brand-cli@${release.tag_name}\n\`\`\``
             })

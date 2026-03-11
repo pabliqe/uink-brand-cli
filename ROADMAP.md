@@ -27,7 +27,7 @@ Make onboarding one-shot, preserve user intent for existing assets, and make out
 - [x] Add `uink-brand init` command to scaffold a minimal `brand.json` and integration guidance.
 - [x] Add interactive mode for first run (`uink-brand --wizard`) with defaults and non-interactive fallback.
 - [ ] Reduce install/run friction:
-  - [x] Support direct execution with `npx @pabliqe/uink-brand-cli`.
+  - [x] Support direct execution with `npx uink-brand-cli`.
   - [ ] Ensure help/docs always show `uink-brand` binary (remove all `og-brand` references/aliases).
   - [x] Print framework-specific next-step snippet only when needed (Next.js, static HTML, Vite).
 - [x] Add `--yes` flag for CI one-shot defaults.
@@ -40,7 +40,7 @@ Make onboarding one-shot, preserve user intent for existing assets, and make out
   - [x] Add idempotent markers to avoid duplicate injections on re-run.
 
 Acceptance criteria:
-- `npx @pabliqe/uink-brand-cli init --yes && npx uink-brand` works in a fresh project.
+- `npx uink-brand-cli init --yes && npx uink-brand` works in a fresh project.
 - README quick start is 3 steps max.
 - First run performs file generation only unless integration is explicitly enabled.
 - `--integrate auto` applies idempotent injections for supported frameworks.

@@ -64,7 +64,7 @@ Template for new versions:
 ### Fixed
 - Prevented CI/non-interactive failures when `brand.json` is missing by auto-running one-shot init defaults in generate mode.
 - Made `npm test` deterministic by using `--brand brand.example.json` instead of requiring a pre-existing `brand.json`.
-- Corrected publish workflow success message to reference `@pabliqe/uink-brand-cli`.
+- Corrected publish workflow success message to reference `uink-brand-cli`.
 
 ---
 
@@ -236,7 +236,7 @@ The first stable release of OG Brand CLI - a zero-config tool for generating PWA
   - satori: ^0.10.0 (React-like JSX to SVG)
 - **Package Type**: ESM with top-level await support
 - **Binary**: `og-brand` command via bin field
-- **Published as**: @pabliqe/og-brand-cli (scoped package)
+- **Published as**: uink-brand-cli
 - **File Size**: ~50KB published package
 - **License**: MIT
 

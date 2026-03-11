@@ -116,7 +116,7 @@ function showHelp() {
 Generate PWA assets, Open Graph images, and meta tags from DTCG tokens.
 
 USAGE:
-  npx @pabliqe/uink-brand-cli [options]
+  npx uink-brand-cli [options]
   uink-brand [options]
   uink-brand init [options]
 
@@ -142,7 +142,7 @@ OPTIONS:
 
 EXAMPLES:
   # One-shot setup (safe defaults, no source patching)
-  npx @pabliqe/uink-brand-cli init --yes
+  npx uink-brand-cli init --yes
   uink-brand init --wizard
   npx uink-brand
 

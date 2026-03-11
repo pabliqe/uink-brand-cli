@@ -1,6 +1,6 @@
 # 🎨 UINK Brand CLI
 
-[![npm version](https://img.shields.io/npm/v/@pabliqe/uink-brand-cli.svg)](https://www.npmjs.com/package/@pabliqe/uink-brand-cli)
+[![npm version](https://img.shields.io/npm/v/uink-brand-cli.svg)](https://www.npmjs.com/package/uink-brand-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 **Zero-config CLI tool for generating PWA assets, Open Graph images, and meta tags from DTCG design tokens.**
@@ -24,13 +24,13 @@ Transform your design tokens into production-ready assets with a single command.
 
 ```bash
 # Run directly with npx (no installation required)
-npx @pabliqe/uink-brand-cli
+npx uink-brand-cli
 
 # Or install globally
-npm install -g @pabliqe/uink-brand-cli
+npm install -g uink-brand-cli
 
 # Or as a dev dependency
-npm install --save-dev @pabliqe/uink-brand-cli
+npm install --save-dev uink-brand-cli
 ```
 
 ### Usage
@@ -38,7 +38,7 @@ npm install --save-dev @pabliqe/uink-brand-cli
 1. **Initialize once (creates `brand.json` with safe defaults):**
 
 ```bash
-npx @pabliqe/uink-brand-cli init --yes
+npx uink-brand-cli init --yes
 ```
 
 2. **Generate assets and metadata files:**
@@ -453,7 +453,7 @@ cd your-project && uink-brand
 # Option 3: Reference as a local dependency in package.json
 # In your project's package.json:
 "devDependencies": {
-  "@pabliqe/uink-brand-cli": "file:../uink-brand-cli"
+  "uink-brand-cli": "file:../uink-brand-cli"
 }
 # Then run: npm install && npm run build
 ```
@@ -462,10 +462,10 @@ cd your-project && uink-brand
 
 ```bash
 # Install as dev dependency
-npm install --save-dev @pabliqe/uink-brand-cli
+npm install --save-dev uink-brand-cli
 
 # Install globally
-npm install -g @pabliqe/uink-brand-cli
+npm install -g uink-brand-cli
 
 # Use in your project
 npm run build  # if configured in package.json
@@ -498,7 +498,7 @@ MIT © Pablo
 ## 🔗 Links
 
 - [GitHub Repository](https://github.com/pabliqe/uink-brand-cli)
-- [npm Package](https://www.npmjs.com/package/@pabliqe/uink-brand-cli)
+- [npm Package](https://www.npmjs.com/package/uink-brand-cli)
 - [Design Tokens Community Group](https://tr.designtokens.org/)
 - [Open Graph Protocol](https://ogp.me/)
 

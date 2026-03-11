@@ -1,5 +1,5 @@
 {
-  "name": "@pabliqe/uink-brand-cli",
+  "name": "uink-brand-cli",
   "version": "1.0.1",
   "description": "Zero-config CLI tool for generating PWA assets, Open Graph images, and meta tags from DTCG design tokens",
   "type": "module",
