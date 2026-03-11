@@ -81,6 +81,7 @@ Acceptance criteria:
   - [x] `--bundle zip|none` (default: `none`)
   - [x] `--bundle-name <name>` (default: `uink-brand-assets.zip`)
   - [x] Include generated assets + manifest + `.og-brand` outputs in bundle
+  - [ ] Alternative `logo` option to use insert colored logo (not alpha-white mask) to avoid aditional paddings and background flat color. 
   - [ ] Add checksum file option for CI artifact integrity (optional)
 
 Acceptance criteria:

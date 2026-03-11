@@ -362,7 +362,25 @@ Auto-generated from your brand's first letter:
 
 ## 🚢 Publishing Setup
 
+### Manual Publishing (Recommended)
+
+This package requires 2FA on npm. Publish manually from your terminal:
+
+```bash
+# Make sure you're logged in
+npm login
+
+# Publish (you'll be prompted for your 2FA OTP code)
+npm publish --access public --otp=YOUR_OTP_CODE
+```
+
+Replace `YOUR_OTP_CODE` with the current 6-digit code from your authenticator app.
+
 ### GitHub Actions (Automatic Publishing)
+
+> **Note:** Automated publishing requires a **Granular Access Token** with 2FA bypass enabled.
+> Create one at npmjs.com → Profile → Access Tokens → Generate New Token → Granular Access Token,
+> set Read & Write access on the package, and enable "Bypass two-factor authentication".
 
 Create `.github/workflows/publish.yml`:
 
@@ -383,28 +401,26 @@ jobs:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
-      - run: npm publish --provenance --access public
+      - run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 ```
 
-### Setup Steps:
+### Setup Steps for CI:
 
-1. **Create npm token:**
-   ```bash
-   npm login
-   npm token create --type=automation
-   ```
+1. **Create a Granular Access Token** on npmjs.com:
+   - Profile → Access Tokens → Generate New Token → **Granular Access Token**
+   - Set name, expiration, select this package, **Read & Write** permissions
+   - Enable **"Bypass two-factor authentication"**
 
 2. **Add to GitHub Secrets:**
-   - Go to: Repository → Settings → Secrets → Actions
+   - Repository → Settings → Secrets and variables → Actions
    - Add secret: `NPM_TOKEN` with your token value
 
 3. **Create a release:**
    - Go to: Releases → Draft a new release
    - Create tag: `v1.0.0`
-   - Publish release
-   - GitHub Actions will automatically publish to npm
+   - Publish release — GitHub Actions will publish to npm automatically
 
 ## 🛠️ Development & Local Usage
 
