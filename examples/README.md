@@ -1,6 +1,6 @@
 # Usage Examples
 
-This directory contains practical examples showing how to integrate OG Brand CLI into various frameworks.
+This directory contains practical examples showing how to integrate UINK Brand CLI into various frameworks.
 
 ## Examples
 
@@ -34,7 +34,7 @@ See [nextjs-pages-router-document.tsx](./nextjs-pages-router-document.tsx) for t
 
 2. **Run the CLI** - it automatically detects and preserves your files:
    ```bash
-   npx @pabliqe/og-brand-cli
+  npx @pabliqe/uink-brand-cli
    ```
    
    Output:
@@ -50,7 +50,7 @@ See [nextjs-pages-router-document.tsx](./nextjs-pages-router-document.tsx) for t
 
 **Tips:**
 - Mix and match freely (e.g., custom OG image + auto-generated icons)
-- Use `--force` to regenerate everything: `og-brand --force`
+- Use `--force` to regenerate everything: `uink-brand --force`
 - Manifest and meta tags always reference the correct files
 export default function RootLayout({ children }) {
   return (

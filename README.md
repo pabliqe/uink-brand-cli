@@ -35,37 +35,25 @@ npm install --save-dev @pabliqe/uink-brand-cli
 
 ### Usage
 
-1. **Create a `brand.json` file** in your project root:
-
-```json
-{
-  "brand": {
-    "name": { "$value": "My Brand", "$type": "string" },
-    "siteTitle": { "$value": "My Awesome Site", "$type": "string" },
-    "description": { "$value": "Building amazing web experiences", "$type": "string" },
-    "siteUrl": { "$value": "https://mybrand.com", "$type": "string" }
-  },
-  "colors": {
-    "primary": {
-      "DEFAULT": { "$value": "#E00069", "$type": "color" }
-    },
-    "ui": {
-      "background": { "$value": "#ffffff", "$type": "color" },
-      "text": {
-        "primary": { "$value": "#1a1a1a", "$type": "color" }
-      }
-    }
-  }
-}
-```
-
-2. **Run the CLI:**
+1. **Initialize once (creates `brand.json` with safe defaults):**
 
 ```bash
-npx @pabliqe/og-brand-cli
+npx @pabliqe/uink-brand-cli init --yes
 ```
 
-3. **Use the generated assets:**
+2. **Generate assets and metadata files:**
+
+```bash
+npx uink-brand
+```
+
+3. **Optional: explicit auto-integration (opt-in):**
+
+```bash
+npx uink-brand --integrate auto
+```
+
+4. **Use the generated assets manually if you skip auto-integration:**
 
 ```jsx
 // React/Next.js
@@ -121,22 +109,55 @@ public/
 ## 🎯 CLI Options
 
 ```bash
-og-brand [options]
+uink-brand [options]
 
 Options:
   -b, --brand <file>         Brand config file (default: brand.json)
   -o, --out <dir>            Output directory for assets (default: public)
   -g, --generate-dir <dir>   Directory for generated code (default: .og-brand)
+  --integrate <mode>         Integration mode: none|auto (default: none)
+  --bundle <mode>            Bundle mode: none|zip (default: none)
+  --bundle-name <name>       Bundle file name (default: uink-brand-assets.zip)
+  --source-logo <path>       Source logo for derived favicon/app icons/OG image
+  --source-favicon <path>    Source favicon to preserve and reference
+  --source-appicon <path>    Source app icon to derive icon outputs
+  --source-og <path>         Source OG image to preserve and reference
+  --logo-padding <0-40>      Padding percent for logo-derived icons (default: 18)
+  --logo-bg <mode>           Logo background: auto|solid|transparent (default: auto)
+  --logo-bg-color <hex>      Background color override for logo-derived assets
+  -y, --yes                  Accept defaults for non-interactive setup
+  --wizard                   Interactive first-run setup for brand.json
   -f, --force                Force regenerate all assets (skip detection)
   -h, --help                 Show help message
   -v, --version              Show version number
 
 Examples:
-  og-brand                   # Use defaults
-  og-brand -b tokens.json    # Custom brand file
-  og-brand -o static         # Custom output directory
-  og-brand --force           # Force regenerate all assets
+  uink-brand init --yes        # Scaffold brand.json + integration guide
+  uink-brand init --wizard     # Interactive init prompts
+  uink-brand                   # Use defaults
+  uink-brand -b tokens.json    # Custom brand file
+  uink-brand --integrate auto  # Explicit opt-in code injection
+  uink-brand --source-logo public/uink-avatar.png
+  uink-brand --source-og public/og-image.png --source-favicon public/favicon.webp
+  uink-brand --bundle zip --bundle-name release-assets.zip
+  uink-brand -o static         # Custom output directory
+  uink-brand --force           # Force regenerate all assets
 ```
+
+### Source Assets (Phase 2)
+
+Use role-based inputs to preserve your existing files while generating missing outputs:
+
+- `--source-logo`: best input for deriving favicon, app icons, and OG image.
+- `--source-favicon`: preserved and referenced as primary favicon.
+- `--source-appicon`: used to derive PWA icon outputs.
+- `--source-og`: preserved and referenced as OG image.
+
+Precedence order:
+`CLI flags > brand.assets in brand.json > existing files > defaults`.
+
+Bundle output:
+use `--bundle zip` to export `public/` and `.og-brand/` as a distributable zip.
 
 ## 🎨 Using Custom Assets
 
@@ -153,7 +174,7 @@ Examples:
 
 2. **Run the CLI** - it will detect existing files and skip generation:
    ```bash
-   og-brand
+  uink-brand
    ```
    Output:
    ```
@@ -179,9 +200,9 @@ Examples:
 ```json
 {
   "scripts": {
-    "prebuild": "og-brand",
+    "prebuild": "uink-brand",
     "build": "vite build",
-    "dev": "og-brand && vite dev"
+    "dev": "uink-brand && vite dev"
   }
 }
 ```
@@ -229,6 +250,9 @@ export default function Document() {
 <!DOCTYPE html>
 <html>
 <head>
+  <!-- Optional marker for auto injection with --integrate auto -->
+  <!-- uink-brand:inject -->
+
   <!-- Copy from .og-brand/meta.html -->
   <title>My Brand</title>
   <meta name="description" content="...">
@@ -408,7 +432,7 @@ node /path/to/uink-brand-cli/bin/cli.js
 cd /path/to/uink-brand-cli
 npm link
 cd /path/to/your-project
-cd your-project && og-brand
+cd your-project && uink-brand
 
 # Option 3: Reference as a local dependency in package.json
 # In your project's package.json:
