@@ -61,6 +61,11 @@ Template for new versions:
 - Storybook integration
 - Chromatic visual testing
 
+### Fixed
+- Prevented CI/non-interactive failures when `brand.json` is missing by auto-running one-shot init defaults in generate mode.
+- Made `npm test` deterministic by using `--brand brand.example.json` instead of requiring a pre-existing `brand.json`.
+- Corrected publish workflow success message to reference `@pabliqe/uink-brand-cli`.
+
 ---
 
 ## [1.0.0] - 2026-03-08

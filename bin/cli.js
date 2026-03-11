@@ -299,6 +299,39 @@ async function runInit(config) {
   console.log('  npx uink-brand\n')
 }
 
+async function ensureBrandFile(config) {
+  const brandPath = path.join(cwd, config.brandFile)
+  if (existsSync(brandPath)) {
+    return brandPath
+  }
+
+  const isDefaultBrandFile = config.brandFile === 'brand.json'
+  const shouldBootstrap = isDefaultBrandFile && (config.yes || process.env.CI || !input.isTTY)
+
+  if (!shouldBootstrap) {
+    console.error(`❌ Error: Brand file not found: ${config.brandFile}`)
+    console.error(`\nCreate a brand.json file in your project root, or specify a custom path:`)
+    console.error(`  uink-brand --brand path/to/your-config.json`)
+    console.error(`  uink-brand init --yes\n`)
+    process.exit(1)
+  }
+
+  console.log(`   ⊙ Missing ${config.brandFile}. Running one-shot init with safe defaults...`)
+  await runInit({
+    ...config,
+    command: 'init',
+    wizard: false,
+    yes: true,
+    force: false,
+  })
+
+  if (!existsSync(brandPath)) {
+    throw new Error(`Brand file bootstrap failed: ${config.brandFile}`)
+  }
+
+  return brandPath
+}
+
 async function integrateNextAppRouter(config) {
   const appLayoutCandidates = ['app/layout.tsx', 'app/layout.ts', 'app/layout.jsx', 'app/layout.js']
   const layoutFile = appLayoutCandidates.find((candidate) => existsSync(path.join(cwd, candidate)))
@@ -502,15 +535,7 @@ async function main() {
   try {
     // Step 1: Parse brand configuration
     console.log('📖 [1/4] Parsing brand configuration...')
-    const brandPath = path.join(cwd, config.brandFile)
-    
-    if (!existsSync(brandPath)) {
-      console.error(`❌ Error: Brand file not found: ${config.brandFile}`)
-      console.error(`\nCreate a brand.json file in your project root, or specify a custom path:`)
-      console.error(`  uink-brand --brand path/to/your-config.json`)
-      console.error(`  uink-brand init --yes\n`)
-      process.exit(1)
-    }
+    const brandPath = await ensureBrandFile(config)
 
     const brandData = await parseBrandConfig(brandPath, cwd)
     console.log(`   ✓ Brand: ${brandData.name}`)

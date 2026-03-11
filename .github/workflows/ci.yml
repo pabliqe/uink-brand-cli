@@ -32,27 +32,15 @@ jobs:
       
       - name: Test CLI execution
         run: |
-          # Create a test brand.json
-          cat > brand.json << 'EOF'
-          {
-            "brand": {
-              "name": { "$value": "Test Brand", "$type": "string" },
-              "description": { "$value": "Test description", "$type": "string" }
-            },
-            "colors": {
-              "primary": {
-                "DEFAULT": { "$value": "#E00069", "$type": "color" }
-              }
-            }
-          }
-          EOF
-          
           # Run the CLI
           node bin/cli.js --help
           node bin/cli.js --version
           
-          # Test generation
+          # Test generation with missing brand.json (auto-bootstrap in CI)
           node bin/cli.js
+
+          # Verify init bootstrap output exists
+          test -f brand.json
           
           # Verify outputs exist
           test -f public/og-image.jpg

@@ -434,7 +434,7 @@ cd uink-brand-cli
 # Install dependencies
 npm install
 
-# Test locally (run the CLI on this project)
+# Test locally (uses brand.example.json)
 npm test
 
 # Run CLI in development mode
