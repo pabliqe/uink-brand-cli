@@ -327,11 +327,11 @@ The CLI generates all essential meta tags for SEO and social sharing:
 - `<link rel="manifest">`
 - Favicons (ICO, SVG, Apple Touch Icon)
 
-### Open Graph
+### Open Graph ([ogp.me](https://ogp.me/))
 - `og:title`, `og:description`, `og:type`
 - `og:url`, `og:image`
-- `og:image:width`, `og:image:height`
-- `og:site_name`
+- `og:image:width`, `og:image:height`, `og:image:type`, `og:image:alt`
+- `og:site_name`, `og:locale`
 
 ### Twitter Cards
 - `twitter:card` (summary_large_image)

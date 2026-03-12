@@ -23,6 +23,7 @@ function parseArgs() {
     command: 'generate',
     brandFile: 'brand.json',
     outDir: 'public',
+    assetUrlPath: null,
     generateDir: '.og-brand',
     integrate: 'none',
     bundle: 'none',
@@ -57,6 +58,8 @@ function parseArgs() {
       config.brandFile = args[++i]
     } else if (arg === '--out' || arg === '-o') {
       config.outDir = args[++i]
+    } else if (arg === '--asset-url-path') {
+      config.assetUrlPath = args[++i]
     } else if (arg === '--generate-dir' || arg === '-g') {
       config.generateDir = args[++i]
     } else if (arg === '--integrate') {
@@ -123,6 +126,7 @@ USAGE:
 OPTIONS:
   -b, --brand <file>         Brand config file (default: brand.json)
   -o, --out <dir>            Output directory for assets (default: public)
+  --asset-url-path <path>    Public URL path for assets (default: auto-detected)
   -g, --generate-dir <dir>   Directory for generated code (default: .og-brand)
   --integrate <mode>         Integration mode: none|auto (default: none)
   --bundle <mode>            Bundle mode: none|zip (default: none)
@@ -291,7 +295,7 @@ async function runInit(config) {
   await mkdir(generateDirPath, { recursive: true })
 
   const integrationGuidePath = path.join(generateDirPath, 'INTEGRATION.md')
-  const integrationGuide = `# UINK Brand Integration\n\nDefault mode is safe file generation only.\n\n## Generate assets\n\n\`\`\`bash\nnpx uink-brand\n\`\`\`\n\n## Optional auto integration\n\nUse explicit opt-in to patch supported project files:\n\n\`\`\`bash\nnpx uink-brand --integrate auto\n\`\`\`\n\nSupported now:\n- Next.js App Router (\`app/layout.*\`)\n- Next.js Pages Router (\`pages/_document.*\`)\n- Static HTML marker injection (add \`<!-- uink-brand:inject -->\` to your \`<head>\`)\n\nIf your framework cannot be patched safely, CLI will preserve files and print manual guidance.\n`
+  const integrationGuide = `# UINK Brand Integration\n\nDefault mode is safe file generation only.\n\n## Generate assets\n\n\`\`\`bash\nnpx uink-brand\n\`\`\`\n\n## Optional auto integration\n\nUse explicit opt-in to patch supported project files:\n\n\`\`\`bash\nnpx uink-brand --integrate auto\n\`\`\`\n\nSupported now:\n- Next.js App Router (\`app/layout.*\`)\n- Next.js Pages Router (\`pages/_document.*\`)\n- Static HTML (\`index.html\`, \`public/index.html\`, \`app.html\`) — injects/updates a \`<!-- uink-brand:start -->\`/\`<!-- uink-brand:end -->\` block before \`</head>\`\n\nIf your framework cannot be patched safely, CLI will preserve files and print manual guidance.\n`
   await writeFile(integrationGuidePath, integrationGuide)
   console.log(`   ✓ Wrote ${path.join(config.generateDir, 'INTEGRATION.md')}`)
 
@@ -407,8 +411,9 @@ async function integrateStaticHtml(config) {
 
   const absoluteHtmlPath = path.join(cwd, htmlFile)
   const source = await readFile(absoluteHtmlPath, 'utf8')
-  if (!source.includes('<!-- uink-brand:inject -->')) {
-    console.log(`   ⊙ ${htmlFile} not patched (missing marker <!-- uink-brand:inject -->).`)
+
+  if (!source.includes('</head>') && !source.includes('<!-- uink-brand:start -->')) {
+    console.log(`   ⊙ ${htmlFile} not patched (no </head> tag found).`)
     return true
   }
 
@@ -419,9 +424,48 @@ async function integrateStaticHtml(config) {
   }
 
   const metaSnippet = (await readFile(metaPath, 'utf8')).trim()
-  const injected = source.replace('<!-- uink-brand:inject -->', `<!-- uink-brand:auto-injected -->\n${metaSnippet}`)
-  await writeFile(absoluteHtmlPath, injected)
-  console.log(`   ✓ Auto-injected head tags into ${htmlFile}`)
+  const isUpdate = source.includes('<!-- uink-brand:start -->')
+
+  // Detect indentation for re-indenting the snippet
+  const anchorMatch = isUpdate
+    ? source.match(/^([ \t]*)<!-- uink-brand:start -->/m)
+    : source.match(/^([ \t]*)<\/head>/m)
+  const headIndent = anchorMatch ? anchorMatch[1] : ''
+
+  const innerTagMatch = source.match(/^([ \t]+)<(?:meta|link|title|script|style)\b/m)
+  let contentIndent
+  if (innerTagMatch) {
+    contentIndent = innerTagMatch[1]
+  } else {
+    const indentUnitMatch = source.match(/^([ \t]+)\S/m)
+    const indentUnit = indentUnitMatch ? indentUnitMatch[1] : '  '
+    contentIndent = headIndent + indentUnit
+  }
+
+  // Re-indent each line of the snippet to match the file's style
+  const indentedSnippet = metaSnippet
+    .split('\n')
+    .map(line => (line.trim() ? contentIndent + line.trim() : ''))
+    .join('\n')
+
+  const block = `${headIndent}<!-- uink-brand:start -->\n${indentedSnippet}\n${headIndent}<!-- uink-brand:end -->`
+
+  let updated
+  if (isUpdate) {
+    updated = source.replace(
+      /^[ \t]*<!-- uink-brand:start -->[\s\S]*?<!-- uink-brand:end -->/m,
+      block
+    )
+    console.log(`   ✓ Updated uink-brand tags in ${htmlFile}`)
+  } else {
+    updated = source.replace(
+      /^([ \t]*)<\/head>/m,
+      `${block}\n${headIndent}</head>`
+    )
+    console.log(`   ✓ Auto-injected head tags into ${htmlFile}`)
+  }
+
+  await writeFile(absoluteHtmlPath, updated)
   return true
 }
 
@@ -485,6 +529,17 @@ async function createBundleIfRequested(config) {
   await rm(zipPath, { force: true })
   await execFileAsync('zip', ['-r', '-q', zipOutput, ...targets], { cwd })
   console.log(`   ✓ Bundle created: ${config.bundleName}`)
+}
+
+// Folders that frameworks serve from the web root (no path segment in URL)
+const WEB_ROOT_DIRS = new Set(['public', 'static', 'dist', 'out', 'build', '.next/static'])
+
+function resolveAssetUrlPath(outDir) {
+  const base = outDir.replace(/^\.?\//, '').replace(/\/$/, '')
+  if (WEB_ROOT_DIRS.has(base)) {
+    return '/'
+  }
+  return '/' + base
 }
 
 async function showVersion() {
@@ -567,7 +622,8 @@ async function main() {
     // Step 4: Generate meta tag components
     console.log('\n🏷️  [4/4] Generating meta tag files...')
     const generateDir = path.join(cwd, config.generateDir)
-    await generateMetaFiles(brandData, generateDir, config.outDir, assetRefs)
+    const assetUrlPath = config.assetUrlPath ?? resolveAssetUrlPath(config.outDir)
+    await generateMetaFiles(brandData, generateDir, assetUrlPath, assetRefs)
     console.log(`   ✓ Meta components generated in ${config.generateDir}/`)
 
     if (config.integrate === 'auto') {
