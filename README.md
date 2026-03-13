@@ -125,6 +125,8 @@ Options:
   --logo-padding <0-40>      Padding percent for logo-derived icons (default: 18)
   --logo-bg <mode>           Logo background: auto|solid|transparent (default: auto)
   --logo-bg-color <hex>      Background color override for logo-derived assets
+  --title-font-size <n>   OG heading font size in px (default: 80)
+  --desc-font-size <n>    OG description font size in px (default: 34)
   -y, --yes                  Accept defaults for non-interactive setup
   --wizard                   Interactive first-run setup for brand.json
   -f, --force                Force regenerate all assets (skip detection)
@@ -138,6 +140,7 @@ Examples:
   uink-brand -b tokens.json    # Custom brand file
   uink-brand --integrate auto  # Explicit opt-in code injection
   uink-brand --source-logo public/uink-avatar.png
+  uink-brand --title-font-size 72 --desc-font-size 32
   uink-brand --source-og public/og-image.png --source-favicon public/favicon.webp
   uink-brand --bundle zip --bundle-name release-assets.zip
   uink-brand -o static         # Custom output directory

@@ -35,6 +35,8 @@ function parseArgs() {
     logoPadding: 18,
     logoBg: 'auto',
     logoBgColor: null,
+    titleFontSize: null,
+    descFontSize: null,
     force: false,
     yes: false,
     wizard: false,
@@ -88,6 +90,10 @@ function parseArgs() {
       config.logoBg = args[++i]
     } else if (arg === '--logo-bg-color') {
       config.logoBgColor = args[++i]
+    } else if (arg === '--title-font-size') {
+      config.titleFontSize = Number(args[++i])
+    } else if (arg === '--desc-font-size') {
+      config.descFontSize = Number(args[++i])
     } else if (arg === '--force' || arg === '-f') {
       config.force = true
     } else if (arg === '--yes' || arg === '-y') {
@@ -138,6 +144,8 @@ OPTIONS:
   --logo-padding <0-40>      Padding percent for logo-derived icons (default: 18)
   --logo-bg <mode>           Logo background: auto|solid|transparent (default: auto)
   --logo-bg-color <hex>      Background color override for logo-derived assets
+  --title-font-size <n>   OG heading font size in px (default: 80)
+  --desc-font-size <n>    OG description font size in px (default: 34)
   -y, --yes                  Accept defaults for non-interactive setup
   --wizard                   Interactive first-run setup for brand.json
   -f, --force                Force regenerate all assets (skip detection)
@@ -560,6 +568,12 @@ async function main() {
     if (Number.isNaN(config.logoPadding) || config.logoPadding < 0 || config.logoPadding > 40) {
       throw new Error(`Invalid --logo-padding value: ${config.logoPadding}. Use a number from 0 to 40.`)
     }
+    if (config.titleFontSize != null && (Number.isNaN(config.titleFontSize) || config.titleFontSize < 24 || config.titleFontSize > 140)) {
+      throw new Error(`Invalid --title-font-size value: ${config.titleFontSize}. Use a number from 24 to 140.`)
+    }
+    if (config.descFontSize != null && (Number.isNaN(config.descFontSize) || config.descFontSize < 16 || config.descFontSize > 96)) {
+      throw new Error(`Invalid --desc-font-size value: ${config.descFontSize}. Use a number from 16 to 96.`)
+    }
   } catch (error) {
     console.error(`\n❌ Error: ${error.message}\n`)
     process.exit(1)
@@ -610,6 +624,10 @@ async function main() {
         padding: config.logoPadding,
         bg: config.logoBg,
         bgColor: config.logoBgColor,
+      },
+      ogOptions: {
+        titleFontSize: config.titleFontSize,
+        descFontSize: config.descFontSize,
       },
     })
     console.log(`   ✓ Assets ready in ${config.outDir}/`)
