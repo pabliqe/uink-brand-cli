@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.0.4]
+- feat: Add title and description font size options for Open Graph images; update asset generation logic (`1663700`)
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),

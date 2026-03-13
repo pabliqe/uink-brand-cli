@@ -27,7 +27,7 @@ function parseArgs() {
     generateDir: '.og-brand',
     integrate: 'none',
     bundle: 'none',
-    bundleName: 'uink-brand-assets.zip',
+    bundleName: 'og-brand-assets.zip',
     sourceLogo: null,
     sourceFavicon: null,
     sourceAppIcon: null,
