@@ -142,7 +142,7 @@ OPTIONS:
   --source-appicon <path>    Source app icon file to derive icon outputs
   --source-og <path>         Source OG image file to preserve and reference
   --logo-padding <0-40>      Padding percent for logo-derived icons (default: 18)
-  --logo-bg <mode>           Logo background: auto|solid|transparent (default: auto)
+  --logo-bg <mode>           Logo background: auto|solid|transparent (default: auto; auto keeps a solid canvas)
   --logo-bg-color <hex>      Background color override for logo-derived assets
   --title-font-size <n>   OG heading font size in px (default: 80)
   --desc-font-size <n>    OG description font size in px (default: 34)
