@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.0.5]
+- feat: Bump version to 1.0.5 in package.json (`dd26d4b`)
+
 ## [1.0.4]
 - feat: Add title and description font size options for Open Graph images; update asset generation logic (`1663700`)
 
