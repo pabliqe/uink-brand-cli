@@ -40,6 +40,7 @@ function parseArgs() {
     force: false,
     yes: false,
     wizard: false,
+    gitignore: false,
     help: false,
     version: false,
   }
@@ -100,6 +101,8 @@ function parseArgs() {
       config.yes = true
     } else if (arg === '--wizard') {
       config.wizard = true
+    } else if (arg === '--gitignore') {
+      config.gitignore = true
     }
   }
 
@@ -149,6 +152,7 @@ OPTIONS:
   -y, --yes                  Accept defaults for non-interactive setup
   --wizard                   Interactive first-run setup for brand.json
   -f, --force                Force regenerate all assets (skip detection)
+  --gitignore                Append generated dirs to .gitignore
   -h, --help                 Show this help message
   -v, --version              Show version number
 
@@ -522,6 +526,25 @@ function resolveSourceOptions(config, brandData) {
   return resolved
 }
 
+async function applyGitignore(config) {
+  const gitignorePath = path.join(cwd, '.gitignore')
+  const entries = [config.outDir, config.generateDir]
+  let existing = ''
+  if (existsSync(gitignorePath)) {
+    existing = await readFile(gitignorePath, 'utf8')
+  }
+  const existingLines = existing.split('\n').map((l) => l.trim())
+  const toAdd = entries.filter((e) => !existingLines.includes(e))
+  if (toAdd.length === 0) {
+    console.log('   ⊙ .gitignore already contains all generated entries')
+    return
+  }
+  const separator = existing.length > 0 && !existing.endsWith('\n') ? '\n' : ''
+  const block = `${separator}# uink-brand generated\n${toAdd.join('\n')}\n`
+  await writeFile(gitignorePath, existing + block)
+  console.log(`   ✓ Added to .gitignore: ${toAdd.join(', ')}`)
+}
+
 async function createBundleIfRequested(config) {
   if (config.bundle !== 'zip') return
 
@@ -652,6 +675,11 @@ async function main() {
     if (config.bundle === 'zip') {
       console.log('\n📦 Creating bundle artifact...')
       await createBundleIfRequested(config)
+    }
+
+    if (config.gitignore) {
+      console.log('\n🙈 Updating .gitignore...')
+      await applyGitignore(config)
     }
 
     console.log('\n✨ All done! Your brand assets are ready.\n')

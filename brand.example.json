@@ -15,11 +15,21 @@
     "description": {
       "$value": "Your site description for SEO and social media sharing",
       "$type": "string"
+    },
+    "assets": {
+      "logo": {
+        "$value": "./public/example-logo.png",
+        "$type": "asset"
+      },
+      "logo-color": {
+        "$value": "./public/example-logo-color.png",
+        "$type": "asset"
+      }
     }
   },
   "colors": {
     "primary": {
-      "DEFAULT": {
+      "default": {
         "$value": "#E00069",
         "$type": "color"
       },
@@ -34,7 +44,7 @@
     },
     "secondary": {
       "orange": {
-        "DEFAULT": {
+        "default": {
           "$value": "#ff7145",
           "$type": "color"
         },
@@ -48,7 +58,7 @@
         }
       },
       "yellow": {
-        "DEFAULT": {
+        "default": {
           "$value": "#fad630",
           "$type": "color"
         },
@@ -62,7 +72,7 @@
         }
       },
       "blue": {
-        "DEFAULT": {
+        "default": {
           "$value": "#4c53fb",
           "$type": "color"
         },
@@ -76,7 +86,7 @@
         }
       },
       "teal": {
-        "DEFAULT": {
+        "default": {
           "$value": "#40c6ae",
           "$type": "color"
         },
