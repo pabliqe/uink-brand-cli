@@ -165,6 +165,45 @@ Use role-based inputs to preserve your existing files while generating missing o
 Precedence order:
 `CLI flags > brand.assets in brand.json > existing files > defaults`.
 
+Grouped asset tokens are also supported under `brand.assets`. This is useful when you want to define both an alpha/monochrome logo and a full-color logo in the same config:
+
+```json
+{
+  "brand": {
+    "assets": {
+      "logo": {
+        "alpha": {
+          "$value": "./assets/logos/logo-alpha.svg",
+          "$type": "asset"
+        },
+        "color": {
+          "$value": "./assets/logos/logo-color.svg",
+          "$type": "asset"
+        }
+      },
+      "favicon": {
+        "$value": "./public/favicon.ico",
+        "$type": "asset"
+      },
+      "appIcon": {
+        "$value": "./public/app-icon.png",
+        "$type": "asset"
+      },
+      "ogImage": {
+        "$value": "./public/og-image.png",
+        "$type": "asset"
+      }
+    }
+  }
+}
+```
+
+Selection rules:
+- `brand.assets.logo.alpha` is preferred by default for white/alpha-mask logo generation.
+- `brand.assets.logo.color` is preferred when you pass `--full-color`.
+- If `alpha` or `color` are not present, the CLI falls back to the first valid nested asset token it finds.
+- `favicon`, `appIcon`, and `ogImage` can also use grouped tokens, but they typically just use `$value` directly.
+
 Bundle output:
 use `--bundle zip` to export `public/` and `.og-brand/` as a distributable zip.
 

@@ -499,37 +499,123 @@ async function autoIntegrate(config) {
   }
 }
 
-function resolveSourcePath(candidate) {
+function describeValueType(value) {
+  if (Array.isArray(value)) return 'array'
+  if (value === null) return 'null'
+  return typeof value
+}
+
+function resolveSourcePath(label, candidate, sourceHint) {
   if (!candidate) return null
+  if (typeof candidate !== 'string') {
+    throw new Error(
+      `${label} must resolve to a string path, but ${sourceHint} produced a ${describeValueType(candidate)}. ` +
+      `If you are using grouped assets, define a token path under $value/$root/DEFAULT or a subgroup such as alpha/color.`
+    )
+  }
   return path.isAbsolute(candidate) ? candidate : path.join(cwd, candidate)
 }
 
-function validateSourceFile(label, filePath, allowedExtensions) {
+function pickAssetVariant(variants, preferredKeys = []) {
+  const entries = Object.entries(variants || {})
+  if (entries.length === 0) return null
+
+  const normalizedEntries = entries.map(([key, value]) => ({
+    key,
+    value,
+    lowerKey: key.toLowerCase(),
+  }))
+
+  for (const preferredKey of preferredKeys) {
+    const lowerPreferredKey = preferredKey.toLowerCase()
+    const match = normalizedEntries.find(({ lowerKey }) => (
+      lowerKey === lowerPreferredKey || lowerKey.endsWith(`.${lowerPreferredKey}`)
+    ))
+    if (match) return { key: match.key, value: match.value }
+  }
+
+  const [firstKey, firstValue] = entries[0]
+  return { key: firstKey, value: firstValue }
+}
+
+function resolveConfiguredAsset({ label, cliValue, configuredValue, configuredVariants, preferredKeys, configPath }) {
+  if (cliValue) {
+    return {
+      path: resolveSourcePath(label, cliValue, `CLI flag for ${label}`),
+      sourceHint: `CLI flag for ${label}`,
+    }
+  }
+
+  const pickedVariant = pickAssetVariant(configuredVariants, preferredKeys)
+  const candidate = pickedVariant?.value ?? configuredValue
+  const sourceHint = pickedVariant ? `${configPath}.${pickedVariant.key}` : configPath
+  return {
+    path: resolveSourcePath(label, candidate, sourceHint),
+    sourceHint,
+  }
+}
+
+function validateSourceFile(label, filePath, allowedExtensions, sourceHint = label) {
   if (!filePath) return
   if (!existsSync(filePath)) {
-    throw new Error(`${label} file not found: ${filePath}`)
+    throw new Error(`${label} file not found: ${filePath} (from ${sourceHint})`)
   }
   const ext = path.extname(filePath).toLowerCase()
   const normalized = ext === '.jpeg' ? '.jpg' : ext
   if (!allowedExtensions.includes(normalized)) {
-    throw new Error(`${label} format not supported: ${ext || '(none)'}. Allowed: ${allowedExtensions.join(', ')}`)
+    throw new Error(`${label} format not supported: ${ext || '(none)'} (from ${sourceHint}). Allowed: ${allowedExtensions.join(', ')}`)
   }
 }
 
 function resolveSourceOptions(config, brandData) {
   const fromConfig = brandData.assets || {}
 
+  const resolvedLogo = resolveConfiguredAsset({
+    label: 'source-logo',
+    cliValue: config.sourceLogo,
+    configuredValue: fromConfig.logo,
+    configuredVariants: fromConfig.logoVariants,
+    preferredKeys: config.fullColor
+      ? ['color', 'fullColor', 'full-color', 'default', '$root', 'alpha']
+      : ['alpha', 'default', '$root', 'mono', 'monochrome', 'white', 'mask', 'color', 'fullColor', 'full-color'],
+    configPath: 'brand.assets.logo',
+  })
+  const resolvedFavicon = resolveConfiguredAsset({
+    label: 'source-favicon',
+    cliValue: config.sourceFavicon,
+    configuredValue: fromConfig.favicon,
+    configuredVariants: fromConfig.faviconVariants,
+    preferredKeys: ['default', '$root'],
+    configPath: 'brand.assets.favicon',
+  })
+  const resolvedAppIcon = resolveConfiguredAsset({
+    label: 'source-appicon',
+    cliValue: config.sourceAppIcon,
+    configuredValue: fromConfig.appIcon,
+    configuredVariants: fromConfig.appIconVariants,
+    preferredKeys: ['default', '$root'],
+    configPath: 'brand.assets.appIcon',
+  })
+  const resolvedOg = resolveConfiguredAsset({
+    label: 'source-og',
+    cliValue: config.sourceOg,
+    configuredValue: fromConfig.ogImage,
+    configuredVariants: fromConfig.ogImageVariants,
+    preferredKeys: ['default', '$root'],
+    configPath: 'brand.assets.ogImage',
+  })
+
   const resolved = {
-    sourceLogo: resolveSourcePath(config.sourceLogo || fromConfig.logo),
-    sourceFavicon: resolveSourcePath(config.sourceFavicon || fromConfig.favicon),
-    sourceAppIcon: resolveSourcePath(config.sourceAppIcon || fromConfig.appIcon),
-    sourceOg: resolveSourcePath(config.sourceOg || fromConfig.ogImage),
+    sourceLogo: resolvedLogo.path,
+    sourceFavicon: resolvedFavicon.path,
+    sourceAppIcon: resolvedAppIcon.path,
+    sourceOg: resolvedOg.path,
   }
 
-  validateSourceFile('source-logo', resolved.sourceLogo, ['.png', '.jpg', '.webp', '.svg'])
-  validateSourceFile('source-favicon', resolved.sourceFavicon, ['.png', '.jpg', '.webp', '.svg', '.ico'])
-  validateSourceFile('source-appicon', resolved.sourceAppIcon, ['.png', '.jpg', '.webp', '.svg'])
-  validateSourceFile('source-og', resolved.sourceOg, ['.png', '.jpg', '.webp', '.svg'])
+  validateSourceFile('source-logo', resolved.sourceLogo, ['.png', '.jpg', '.webp', '.svg'], resolvedLogo.sourceHint)
+  validateSourceFile('source-favicon', resolved.sourceFavicon, ['.png', '.jpg', '.webp', '.svg', '.ico'], resolvedFavicon.sourceHint)
+  validateSourceFile('source-appicon', resolved.sourceAppIcon, ['.png', '.jpg', '.webp', '.svg'], resolvedAppIcon.sourceHint)
+  validateSourceFile('source-og', resolved.sourceOg, ['.png', '.jpg', '.webp', '.svg'], resolvedOg.sourceHint)
 
   return resolved
 }

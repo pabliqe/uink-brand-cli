@@ -18,12 +18,14 @@
     },
     "assets": {
       "logo": {
-        "$value": "./public/example-logo.png",
-        "$type": "asset"
-      },
-      "logo-color": {
-        "$value": "./public/example-logo-color.png",
-        "$type": "asset"
+        "alpha": {
+          "$value": "./public/example-logo.png",
+          "$type": "asset"
+        },
+        "color": {
+          "$value": "./public/example-logo-color.png",
+          "$type": "asset"
+        }
       }
     }
   },
