@@ -37,6 +37,8 @@ function parseArgs() {
     logoBgColor: null,
     titleFontSize: null,
     descFontSize: null,
+    ogFormat: 'png',
+    fullColor: false,
     force: false,
     yes: false,
     wizard: false,
@@ -95,6 +97,10 @@ function parseArgs() {
       config.titleFontSize = Number(args[++i])
     } else if (arg === '--desc-font-size') {
       config.descFontSize = Number(args[++i])
+    } else if (arg === '--og-format') {
+      config.ogFormat = args[++i]
+    } else if (arg === '--full-color') {
+      config.fullColor = true
     } else if (arg === '--force' || arg === '-f') {
       config.force = true
     } else if (arg === '--yes' || arg === '-y') {
@@ -149,6 +155,8 @@ OPTIONS:
   --logo-bg-color <hex>      Background color override for logo-derived assets
   --title-font-size <n>   OG heading font size in px (default: 80)
   --desc-font-size <n>    OG description font size in px (default: 34)
+  --og-format <fmt>          OG image output format: png (default: png)
+  --full-color               Logo is full-color (not white/alpha mask); uses transparent bg for icons
   -y, --yes                  Accept defaults for non-interactive setup
   --wizard                   Interactive first-run setup for brand.json
   -f, --force                Force regenerate all assets (skip detection)
@@ -181,7 +189,7 @@ EXAMPLES:
 
 OUTPUT:
   Assets (in public/):
-    • og-image.jpg           - Open Graph image (1200x630)
+    • og-image.png           - Open Graph image (1200x630)
     • favicon.ico            - Classic favicon
     • favicon.svg            - Modern scalable favicon
     • apple-touch-icon.png   - Apple touch icon (180x180)
@@ -597,6 +605,9 @@ async function main() {
     if (config.descFontSize != null && (Number.isNaN(config.descFontSize) || config.descFontSize < 16 || config.descFontSize > 96)) {
       throw new Error(`Invalid --desc-font-size value: ${config.descFontSize}. Use a number from 16 to 96.`)
     }
+    if (!['png'].includes(config.ogFormat)) {
+      throw new Error(`Invalid --og-format value: ${config.ogFormat}. Use 'png'. JPG/WebP are not supported yet.`)
+    }
   } catch (error) {
     console.error(`\n❌ Error: ${error.message}\n`)
     process.exit(1)
@@ -651,7 +662,10 @@ async function main() {
       ogOptions: {
         titleFontSize: config.titleFontSize,
         descFontSize: config.descFontSize,
+        fullColor: config.fullColor,
       },
+      ogFormat: config.ogFormat,
+      fullColor: config.fullColor,
     })
     console.log(`   ✓ Assets ready in ${config.outDir}/`)
 

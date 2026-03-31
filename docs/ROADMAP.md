@@ -4,7 +4,7 @@ Status: Draft v1 (March 11, 2026)
 Owner: CLI core
 
 ## Decision Log (Confirmed)
-- Default OG output format: `jpg`.
+- Default OG output format: `png` (temporary until true JPG/WebP encoders are implemented).
 - Existing user assets should be reused when possible (do not replace by default).
 - Default favicon outputs: `favicon.ico` and `favicon.svg`.
 - Conflict policy default: `preserve`.
@@ -65,14 +65,14 @@ Acceptance criteria:
   - [x] If `logo` is provided, generate high-quality derived assets:
     - [x] `favicon.ico` and `favicon.svg`
     - [x] `icon-192x192.png`, `icon-512x512.png`, `icon-512x512-maskable.png`
-    - [x] `og-image.jpg` using logo composition + brand colors
+    - [x] `og-image.png` using logo composition + brand colors
   - [x] Keep user-provided ready assets as authoritative for their role (do not overwrite by default).
   - [x] Fill only missing roles from derivation/default generators.
 - [x] Add visual controls for derived assets:
   - [x] `--logo-padding <0-40>`
   - [x] `--logo-bg auto|solid|transparent`
   - [x] `--logo-bg-color <hex>`
-  - [ ] `--logo-scale contain|cover`
+  - [x] `--logo-scale contain|cover`
 - [x] Define precedence and conflict policy:
   - [x] CLI flags > `brand.assets` config > auto-detected existing files > defaults
   - [x] `preserve` remains default for existing outputs
@@ -81,7 +81,7 @@ Acceptance criteria:
   - [x] `--bundle zip|none` (default: `none`)
   - [x] `--bundle-name <name>` (default: `uink-brand-assets.zip`)
   - [x] Include generated assets + manifest + `.og-brand` outputs in bundle
-  - [ ] Alternative `logo` option to use insert colored logo (not alpha-white mask) to avoid aditional paddings and background flat color. 
+  - [x] Alternative `logo` option to use insert colored logo (not alpha-white mask) to avoid aditional paddings and background flat color. (`--full-color`)
   - [ ] Add checksum file option for CI artifact integrity (optional)
 
 Acceptance criteria:
@@ -92,16 +92,17 @@ Acceptance criteria:
 - When `--bundle zip` is used, CLI outputs a ready-to-share zip containing final assets and generated meta files.
 
 ### Phase 3 - Extension and Naming Consistency (P0)
-- [ ] Define canonical output contract:
-  - [ ] OG image default: `og-image.jpg` (configurable)
-  - [ ] Favicon outputs default: `favicon.ico`, `favicon.svg`; optional `favicon.png`
-  - [ ] PWA icons: `icon-192x192.png`, `icon-512x512.png`, `icon-512x512-maskable.png`
+- [x] Define canonical output contract:
+  - [x] OG image default: `og-image.png`
+  - [x] Favicon outputs default: `favicon.ico`, `favicon.svg`; optional `favicon.png`
+  - [x] PWA icons: `icon-192x192.png`, `icon-512x512.png`, `icon-512x512-maskable.png`
 - [ ] Add naming strategy option:
   - [ ] `--naming legacy|canonical|project`
-- [ ] Add extension strategy option:
-  - [ ] `--og-format png|jpg|webp`
+- [x] Add extension strategy option:
+  - [x] `--og-format png`
+  - [ ] Re-enable `--og-format jpg|webp` after true image encoding support lands
   - [ ] `--favicon-format auto|ico|png|svg|multi`
-- [ ] Ensure generated meta and manifest always reference the chosen canonical outputs.
+- [x] Ensure generated meta and manifest always reference the chosen canonical outputs.
 
 Acceptance criteria:
 - No mixed, unpredictable extension changes between runs.
@@ -117,8 +118,8 @@ Acceptance criteria:
 - [ ] If conversion is needed (example: source png to required ico), write derived files without deleting original user assets.
 - [ ] Reuse existing OG assets by preference order:
   - [ ] If user set `--source-og` or `brand.assets.ogImage`, use that.
-  - [ ] Else detect `og-image.jpg|png|webp` and keep existing format if valid.
-  - [ ] If no OG exists, generate default `og-image.jpg`.
+  - [ ] Else detect `og-image.png|jpg|webp` and keep existing format if valid.
+  - [ ] If no OG exists, generate default `og-image.png`.
 - [ ] Reuse existing favicon assets by preference order:
   - [ ] If user set `--source-favicon` or `brand.assets.favicon`, use that as source.
   - [ ] Else detect existing `favicon.ico|svg|png|webp`; keep existing and generate missing required variants only.

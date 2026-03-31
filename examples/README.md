@@ -28,7 +28,7 @@ See [nextjs-pages-router-document.tsx](./nextjs-pages-router-document.tsx) for t
    ```bash
    mkdir -p public
    cp my-logo.png public/favicon.ico
-   cp my-og-image.jpg public/og-image.jpg
+  cp my-og-image.png public/og-image.png
    cp my-apple-icon.png public/apple-touch-icon.png
    ```
 
@@ -40,7 +40,7 @@ See [nextjs-pages-router-document.tsx](./nextjs-pages-router-document.tsx) for t
    Output:
    ```
    🖼️  [2/4] Generating assets...
-      ⊙ og-image.jpg (using existing)
+    ⊙ og-image.png (using existing)
       ⊙ favicon.ico (using existing)
       ✓ icon-192x192.png (192x192)
       ...

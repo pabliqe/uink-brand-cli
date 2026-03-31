@@ -77,7 +77,7 @@ export default function App() {
 
 ```
 public/
-├── og-image.jpg              # Open Graph image (1200x630)
+├── og-image.png              # Open Graph image (1200x630)
 ├── favicon.ico               # Classic favicon (32x32)
 ├── favicon.svg               # Modern scalable favicon
 ├── apple-touch-icon.png      # Apple touch icon (180x180)
@@ -123,10 +123,13 @@ Options:
   --source-appicon <path>    Source app icon to derive icon outputs
   --source-og <path>         Source OG image to preserve and reference
   --logo-padding <0-40>      Padding percent for logo-derived icons (default: 18)
-  --logo-bg <mode>           Logo background: auto|solid|transparent (default: auto; auto keeps a solid canvas)
+  --logo-bg <mode>           Logo background: auto|solid|transparent (default: auto)
   --logo-bg-color <hex>      Background color override for logo-derived assets
-  --title-font-size <n>   OG heading font size in px (default: 80)
-  --desc-font-size <n>    OG description font size in px (default: 34)
+  --full-color               Logo is full-color (not white/alpha mask); uses transparent bg for icons
+  --title-font-size <n>      OG heading font size in px (default: 80)
+  --desc-font-size <n>       OG description font size in px (default: 34)
+  --og-format <fmt>          OG image format: png (default: png)
+  --gitignore                Append generated dirs to .gitignore
   -y, --yes                  Accept defaults for non-interactive setup
   --wizard                   Interactive first-run setup for brand.json
   -f, --force                Force regenerate all assets (skip detection)
@@ -139,10 +142,13 @@ Examples:
   uink-brand                   # Use defaults
   uink-brand -b tokens.json    # Custom brand file
   uink-brand --integrate auto  # Explicit opt-in code injection
-  uink-brand --source-logo public/uink-avatar.png
+  uink-brand --source-logo public/logo.svg
+  uink-brand --source-logo public/logo.svg --full-color
+  uink-brand --og-format png
   uink-brand --title-font-size 72 --desc-font-size 32
   uink-brand --source-og public/og-image.png --source-favicon public/favicon.webp
   uink-brand --bundle zip --bundle-name release-assets.zip
+  uink-brand --gitignore
   uink-brand -o static         # Custom output directory
   uink-brand --force           # Force regenerate all assets
 ```
@@ -151,7 +157,7 @@ Examples:
 
 Use role-based inputs to preserve your existing files while generating missing outputs:
 
-- `--source-logo`: best input for deriving favicon, app icons, and OG image.
+- `--source-logo`: best input for deriving favicon, app icons, and OG image. Accepts PNG, JPG, WebP, or **SVG**.
 - `--source-favicon`: preserved and referenced as primary favicon.
 - `--source-appicon`: used to derive PWA icon outputs.
 - `--source-og`: preserved and referenced as OG image.
@@ -162,6 +168,45 @@ Precedence order:
 Bundle output:
 use `--bundle zip` to export `public/` and `.og-brand/` as a distributable zip.
 
+### Logo mode: white/alpha mask vs. full-color
+
+By default the CLI treats `--source-logo` as a **white or alpha-mask logo** — it renders it over the brand's primary-color gradient background, which is a common pattern for monochrome brand marks.
+
+If your logo already contains its own colors, pass `--full-color`:
+
+```bash
+# White/alpha-mask logo (default)
+uink-brand --source-logo public/logo-white.svg
+
+# Full-color logo
+uink-brand --source-logo public/logo-color.svg --full-color
+```
+
+**What changes with `--full-color`:**
+- Icons and favicons use a **transparent background** instead of the primary color, so the logo's own colors are preserved.
+- The OG image left column renders the logo inside a **white card** against the gradient, keeping it legible.
+- The maskable PWA icon (`icon-512x512-maskable.png`) always retains a solid background (required by the spec) — use `--logo-bg-color` to set a custom color.
+
+### OG image format
+
+The default OG output file is `og-image.png`. `--og-format` currently supports PNG only:
+
+```bash
+uink-brand --og-format png   # outputs og-image.png
+```
+
+> **Note:** JPG/WebP are temporarily disabled until real encoders are implemented.
+
+**Existing file detection** takes priority: if `og-image.png` already exists in your output dir, it is reused regardless of `--og-format`. Use `--force` to override.
+
+### .gitignore helper
+
+Pass `--gitignore` to append the generated directories (`public/` and `.og-brand/` by default) to your project's `.gitignore`. Entries that already exist are skipped.
+
+```bash
+uink-brand --gitignore
+```
+
 ## 🎨 Using Custom Assets
 
 **Want to use your own logo or custom OG image?** No problem!
@@ -169,7 +214,7 @@ use `--bundle zip` to export `public/` and `.og-brand/` as a distributable zip.
 1. **Place your custom assets** in the output directory (default: `public/`):
    ```bash
    public/
-   ├── og-image.jpg          # Your custom OG image
+  ├── og-image.png          # Your custom OG image
    ├── favicon.ico           # Your custom favicon
    ├── favicon.svg           # Your custom SVG icon
    └── apple-touch-icon.png  # Your custom Apple icon
@@ -182,7 +227,7 @@ use `--bundle zip` to export `public/` and `.og-brand/` as a distributable zip.
    Output:
    ```
    🖼️  [2/4] Generating assets...
-      ⊙ og-image.jpg (using existing)
+    ⊙ og-image.png (using existing)
       ⊙ favicon.ico (using existing)
       ✓ icon-192x192.png (192x192)
       ...
@@ -344,22 +389,25 @@ The CLI generates all essential meta tags for SEO and social sharing:
 ## 🎨 Asset Generation Details
 
 ### OG Image (1200x630px)
-Auto-generated from your brand tokens - no design tool needed:
-- **Typography-based** - Uses your brand name and site title
-- **Brand colors** - Background, text, and accents from your tokens
-- **System fonts** - Reliable rendering on all platforms
-- **Version badge** - Shows your package.json version
-- **Decorative elements** - Subtle brand-colored circles
-- **Custom override** - Place your own `og-image.jpg` in `public/` to use it instead
+Auto-generated from your brand tokens — no design tool needed:
+- **Typography-based** — uses your brand name and site title
+- **Brand colors** — background, text, and accents from your tokens
+- **System fonts** — reliable rendering on all platforms
+- **Version badge** — shows your package.json version
+- **Logo support** — pass `--source-logo` to render your logo in the left column
+- **Full-color logos** — add `--full-color` to render colored logos on a white card instead of over the gradient
+- **Current format policy** — `--og-format` supports `png` only (default: `png`)
+- **Custom override** — existing `og-image.*` in `public/` is reused automatically
 
 ### Favicons & Icons
-Auto-generated from your brand's first letter:
-- **No logo upload** - Creates letter-based icon automatically
-- **Primary color** - Uses `colors.primary` as background
-- **White letter** - First character of your brand name
-- **All formats** - ICO, SVG, Apple Touch, PWA (standard + maskable)
-- **Responsive** - Proper sizing for each platform (32px to 512px)
-- **Custom override** - Place your own icons in `public/` to use them instead
+Auto-generated from your brand's first letter, or from a source logo:
+- **No logo upload required** — creates a letter-based icon automatically
+- **SVG logo support** — `--source-logo` accepts PNG, JPG, WebP, and SVG
+- **White/alpha-mask mode** (default) — logo rendered over the primary-color background
+- **Full-color mode** — `--full-color` switches to transparent background so the logo's own colors show
+- **All formats** — ICO, SVG, Apple Touch, PWA (standard + maskable)
+- **Responsive** — proper sizing for each platform (32px to 512px)
+- **Custom override** — place your own icons in `public/` to use them instead
 
 **Smart Detection:** The CLI automatically detects existing assets and preserves them. Only missing assets are generated. Use `--force` to regenerate everything.
 

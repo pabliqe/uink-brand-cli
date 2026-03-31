@@ -43,7 +43,7 @@ jobs:
           test -f brand.json
           
           # Verify outputs exist
-          test -f public/og-image.jpg
+          test -f public/og-image.png
           test -f public/manifest.json
           test -f .og-brand/BrandMeta.jsx
           

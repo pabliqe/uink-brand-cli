@@ -23,6 +23,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `--full-color` flag: treats `--source-logo` as a full-color logo instead of a white/alpha mask. Icons and favicons use a transparent background; the OG image left column renders the logo inside a white card against the gradient. The maskable PWA icon always retains a solid background (spec requirement).
+- `--og-format <png>` support for OG output (default: `png`) while real JPG/WebP encoders are pending.
+- `--gitignore` flag: appends the output dir and generate dir to `.gitignore` after generation. Skips entries already present. Creates `.gitignore` if it does not exist.
+- SVG accepted as a `--source-logo` input (alongside PNG, JPG, WebP) for all derived outputs (favicon, app icons, OG image).
+- OG image log now shows the actual output filename instead of the hardcoded `og-image.jpg`.
+
+### Changed
+- `--logo-bg` default behaviour documented as `auto` (keeps a solid canvas for monochrome/alpha logos). `--full-color` is now the explicit opt-in for transparent icon backgrounds.
+- Icon derivation pipeline uses `effectiveLogoBg` internally so `--full-color` overrides `--logo-bg` without requiring the user to also pass `--logo-bg transparent`.
+- OG output policy is now PNG-only for generated files. Existing `og-image.jpg`/`og-image.webp` files are still detected and preserved.
+
 <!--
 Template for new versions:
 
@@ -50,10 +62,8 @@ Template for new versions:
 
 ### Planned Features
 - Custom font support (Google Fonts, local fonts)
-- SVG logo integration in OG images
 - Custom OG image templates
 - Multiple OG images (per-page support)
-- Favicon generator from logo/SVG input
 - Dark mode asset variants
 - Localization support (multi-language meta tags)
 - Analytics integration helpers
