@@ -6,8 +6,16 @@
   "bin": {
     "uink-brand": "./bin/cli.js"
   },
+  "exports": {
+    ".": "./bin/cli.js",
+    "./lib/parser.js": "./lib/parser.js",
+    "./lib/generator.js": "./lib/generator.js",
+    "./lib/meta-generator.js": "./lib/meta-generator.js"
+  },
   "scripts": {
-    "test": "node bin/cli.js --brand brand.example.json",
+    "test": "npm run test:core",
+    "test:core": "node --test test/core-parity.test.js",
+    "test:cli": "node bin/cli.js --brand brand.example.json --force",
     "build:changelog": "node scripts/update-changelog.mjs",
     "prepublishOnly": "echo 'Ready to publish'"
   },

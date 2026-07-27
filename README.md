@@ -7,6 +7,8 @@
 
 Transform your design tokens into production-ready assets with a single command. Perfect for modern web projects, PWAs, and design systems.
 
+> **Core ownership:** `lib/parser.js`, `lib/generator.js`, and `lib/meta-generator.js` are the canonical generation APIs. Authoring UIs such as [`uink-brand-tokens`](../uink-brand-tokens) consume them through a thin adapter (`@uink/identity-engine`) so preview/export stay in sync with `npx uink-brand`.
+
 ## ✨ Features
 
 - 🎯 **Zero Configuration** - Works out of the box with sensible defaults
@@ -642,6 +644,25 @@ Works automatically with Netlify builds:
 ```
 
 The `prebuild` script ensures OG image and meta tags are updated before each build.
+
+## 🧩 Programmatic Core API
+
+Other tools can import the same generation core the CLI uses:
+
+```js
+import { parseBrandFromJson } from 'uink-brand-cli/lib/parser.js'
+import { generateAssetsInMemory } from 'uink-brand-cli/lib/generator.js'
+import { buildManifest, buildMetaFiles } from 'uink-brand-cli/lib/meta-generator.js'
+
+const brandData = parseBrandFromJson(brandJson)
+const { files, refs } = await generateAssetsInMemory(brandData, { force: true })
+const manifest = buildManifest(brandData)
+const metaFiles = buildMetaFiles(brandData, refs, { generateDir: '.uink-brand' })
+```
+
+- `generateAssetsInMemory` accepts filesystem paths, data URLs, or Buffers
+- `buildMetaFiles({ generateDir })` controls output path prefix (CLI default `.og-brand`, tokens export `.uink-brand`)
+- OG theme options: `ogOptions.theme` = `primary` | `white` | `dark`
 
 ## 🎯 Use Cases
 

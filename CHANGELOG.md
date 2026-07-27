@@ -24,6 +24,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Pure reusable core APIs for authoring tools: `parseBrandFromJson`, `generateAssetsInMemory`, `buildManifest`, `buildMetaFiles` (exported via `uink-brand-cli/lib/*`).
+- OG theme support in the core generator: `ogOptions.theme` = `primary` | `white` | `dark` (used by `uink-brand-tokens` preview).
+- `siteUrl` normalization (adds `https://` when missing).
+- Configurable meta output dir via `buildMetaFiles({ generateDir })` so tokens can emit `.uink-brand/` while CLI keeps `.og-brand/`.
+- Core parity tests in `test/core-parity.test.js`.
 - `--full-color` flag: treats `--source-logo` as a full-color logo instead of a white/alpha mask. Icons and favicons use a transparent background; the OG image left column renders the logo inside a white card against the gradient. The maskable PWA icon always retains a solid background (spec requirement).
 - `--og-format <png>` support for OG output (default: `png`) while real JPG/WebP encoders are pending.
 - `--gitignore` flag: appends the output dir and generate dir to `.gitignore` after generation. Skips entries already present. Creates `.gitignore` if it does not exist.
@@ -31,6 +36,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - OG image log now shows the actual output filename instead of the hardcoded `og-image.jpg`.
 
 ### Changed
+- CLI filesystem generators now wrap the in-memory core (single source of truth for parsing, assets, and meta).
+- Generated meta attribution standardized to `uink-brand-cli`.
 - `--logo-bg` default behaviour documented as `auto` (keeps a solid canvas for monochrome/alpha logos). `--full-color` is now the explicit opt-in for transparent icon backgrounds.
 - Icon derivation pipeline uses `effectiveLogoBg` internally so `--full-color` overrides `--logo-bg` without requiring the user to also pass `--logo-bg transparent`.
 - OG output policy is now PNG-only for generated files. Existing `og-image.jpg`/`og-image.webp` files are still detected and preserved.
