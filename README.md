@@ -124,13 +124,16 @@ Options:
   --source-favicon <path>    Source favicon to preserve and reference
   --source-appicon <path>    Source app icon to derive icon outputs
   --source-og <path>         Source OG image to preserve and reference
-  --logo-padding <0-40>      Padding percent for logo-derived icons (default: 18)
-  --logo-bg <mode>           Logo background: auto|solid|transparent (default: auto)
+  --logo-padding <0-40>      Padding percent for logo-derived icons (default: 0)
+  --logo-bg <mode>           Logo background: auto|solid|transparent (default: auto; auto keeps PNG alpha for uploads)
   --logo-bg-color <hex>      Background color override for logo-derived assets
   --full-color               Logo is full-color (not white/alpha mask); uses transparent bg for icons
   --title-font-size <n>      OG heading font size in px (default: 80)
   --desc-font-size <n>       OG description font size in px (default: 34)
   --og-format <fmt>          OG image format: png (default: png)
+  --og-dots                  Force OG background dot pattern on
+  --no-og-dots               Force OG background dot pattern off
+  --og-logo-shape <shape>    OG logo mask: square|rounded|circular (default: square)
   --gitignore                Append generated dirs to .gitignore
   -y, --yes                  Accept defaults for non-interactive setup
   --wizard                   Interactive first-run setup for brand.json
@@ -225,8 +228,12 @@ uink-brand --source-logo public/logo-color.svg --full-color
 
 **What changes with `--full-color`:**
 - Icons and favicons use a **transparent background** instead of the primary color, so the logo's own colors are preserved.
-- The OG image left column renders the logo inside a **white card** against the gradient, keeping it legible.
-- The maskable PWA icon (`icon-512x512-maskable.png`) always retains a solid background (required by the spec) — use `--logo-bg-color` to set a custom color.
+- The OG image left column places the logo directly on the gradient (no white plate).
+
+**Logo background (`--logo-bg`):**
+- `auto` (default): uploaded logos keep a **transparent** canvas so PNG alpha is preserved; use `--logo-bg solid` for a brand-colored plate.
+- `transparent` / `solid`: force either mode explicitly.
+- Maskable icons follow the same background mode for uploads (lettermark fallbacks stay solid).
 
 ### OG image format
 
@@ -436,7 +443,7 @@ Auto-generated from your brand tokens — no design tool needed:
 - **System fonts** — reliable rendering on all platforms
 - **Version badge** — shows your package.json version
 - **Logo support** — pass `--source-logo` to render your logo in the left column
-- **Full-color logos** — add `--full-color` to render colored logos on a white card instead of over the gradient
+- **Full-color logos** — add `--full-color` for transparent icon backgrounds so the logo's own colors show
 - **Current format policy** — `--og-format` supports `png` only (default: `png`)
 - **Custom override** — existing `og-image.*` in `public/` is reused automatically
 

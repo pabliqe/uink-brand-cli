@@ -32,12 +32,14 @@ function parseArgs() {
     sourceFavicon: null,
     sourceAppIcon: null,
     sourceOg: null,
-    logoPadding: 18,
+    logoPadding: 0,
     logoBg: 'auto',
     logoBgColor: null,
     titleFontSize: null,
     descFontSize: null,
     ogFormat: 'png',
+    ogShowDots: null,
+    ogLogoShape: null,
     fullColor: false,
     force: false,
     yes: false,
@@ -99,6 +101,12 @@ function parseArgs() {
       config.descFontSize = Number(args[++i])
     } else if (arg === '--og-format') {
       config.ogFormat = args[++i]
+    } else if (arg === '--og-dots') {
+      config.ogShowDots = true
+    } else if (arg === '--no-og-dots') {
+      config.ogShowDots = false
+    } else if (arg === '--og-logo-shape') {
+      config.ogLogoShape = args[++i]
     } else if (arg === '--full-color') {
       config.fullColor = true
     } else if (arg === '--force' || arg === '-f') {
@@ -123,6 +131,11 @@ function normalizeIntegrateMode(mode) {
 function normalizeBundleMode(mode) {
   if (mode === 'zip' || mode === 'none') return mode
   throw new Error(`Invalid --bundle value: ${mode}. Use 'zip' or 'none'.`)
+}
+
+function normalizeOgLogoShape(shape) {
+  if (shape === 'square' || shape === 'rounded' || shape === 'circular') return shape
+  throw new Error(`Invalid --og-logo-shape value: ${shape}. Use 'square', 'rounded', or 'circular'.`)
 }
 
 function showHelp() {
@@ -150,12 +163,15 @@ OPTIONS:
   --source-favicon <path>    Source favicon file to preserve and reference
   --source-appicon <path>    Source app icon file to derive icon outputs
   --source-og <path>         Source OG image file to preserve and reference
-  --logo-padding <0-40>      Padding percent for logo-derived icons (default: 18)
-  --logo-bg <mode>           Logo background: auto|solid|transparent (default: auto; auto keeps a solid canvas)
+  --logo-padding <0-40>      Padding percent for logo-derived icons (default: 0)
+  --logo-bg <mode>           Logo background: auto|solid|transparent (default: auto; auto keeps PNG alpha for uploads)
   --logo-bg-color <hex>      Background color override for logo-derived assets
   --title-font-size <n>   OG heading font size in px (default: 80)
   --desc-font-size <n>    OG description font size in px (default: 34)
   --og-format <fmt>          OG image output format: png (default: png)
+  --og-dots                  Force OG background dot pattern on
+  --no-og-dots               Force OG background dot pattern off
+  --og-logo-shape <shape>    OG logo mask: square|rounded|circular (default: square)
   --full-color               Logo is full-color (not white/alpha mask); uses transparent bg for icons
   -y, --yes                  Accept defaults for non-interactive setup
   --wizard                   Interactive first-run setup for brand.json
@@ -694,6 +710,9 @@ async function main() {
     if (!['png'].includes(config.ogFormat)) {
       throw new Error(`Invalid --og-format value: ${config.ogFormat}. Use 'png'. JPG/WebP are not supported yet.`)
     }
+    if (config.ogLogoShape != null) {
+      config.ogLogoShape = normalizeOgLogoShape(config.ogLogoShape)
+    }
   } catch (error) {
     console.error(`\n❌ Error: ${error.message}\n`)
     process.exit(1)
@@ -749,6 +768,8 @@ async function main() {
         titleFontSize: config.titleFontSize,
         descFontSize: config.descFontSize,
         fullColor: config.fullColor,
+        ...(typeof config.ogShowDots === 'boolean' ? { showDots: config.ogShowDots } : {}),
+        ...(config.ogLogoShape ? { logoShape: config.ogLogoShape } : {}),
       },
       ogFormat: config.ogFormat,
       fullColor: config.fullColor,
