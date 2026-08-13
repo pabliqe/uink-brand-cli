@@ -370,12 +370,39 @@ export default function Document() {
 
 ## 📐 Brand.json Format
 
+### UINK Tools family
+
+Internal `uink-*` apps use **UINK Tools** as the umbrella `brand.name`. That value is written to `<title>` (as `{siteTitle} | {name}`), `og:site_name`, PWA `manifest.name`, and author/publisher fields.
+
+| Token | Role |
+|-------|------|
+| `brand.name` | Publisher / umbrella brand. Aliases: `brand.author`, `brand.brandname`. |
+| `brand.siteTitle` | This product’s page title. Aliases: `brand.title`, `brand.siteName`. |
+| `brand.description` | SEO and Open Graph description. |
+| `brand.siteUrl` | Canonical origin. |
+
+Example for a UINK Tools app:
+
+```json
+{
+  "brand": {
+    "name": { "$value": "UINK Tools", "$type": "string" },
+    "siteTitle": { "$value": "Brand Token Generator", "$type": "string" },
+    "description": { "$value": "Generate and standardize your brand tokens in JSON.", "$type": "string" },
+    "siteUrl": { "$value": "https://tokens.uink.agency", "$type": "string" }
+  }
+}
+```
+
+Repo and npm names stay `uink-*` / `@uink/*`. Do not put `Uink Digital Agency` in `brand.name` on these tools. See [docs/BRAND.md](./docs/BRAND.md).
+
 ### DTCG Format (Recommended)
 
 ```json
 {
   "brand": {
     "name": { "$value": "Brand Name", "$type": "string" },
+    "siteTitle": { "$value": "Your Site Title or Tagline", "$type": "string" },
     "description": { "$value": "Description", "$type": "string" }
   },
   "colors": {
