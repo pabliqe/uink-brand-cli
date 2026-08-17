@@ -128,7 +128,7 @@ Options:
   --logo-bg <mode>           Logo background: auto|solid|transparent (default: auto; auto keeps PNG alpha for uploads)
   --logo-bg-color <hex>      Background color override for logo-derived assets
   --full-color               Logo is full-color (not white/alpha mask); uses transparent bg for icons
-  --title-font-size <n>      OG heading font size in px (default: 80)
+  --title-font-size <n>      OG heading font size in px (default: 72)
   --desc-font-size <n>       OG description font size in px (default: 34)
   --og-format <fmt>          OG image format: png (default: png)
   --og-dots                  Force OG background dot pattern on

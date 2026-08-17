@@ -166,7 +166,7 @@ OPTIONS:
   --logo-padding <0-40>      Padding percent for logo-derived icons (default: 0)
   --logo-bg <mode>           Logo background: auto|solid|transparent (default: auto; auto keeps PNG alpha for uploads)
   --logo-bg-color <hex>      Background color override for logo-derived assets
-  --title-font-size <n>   OG heading font size in px (default: 80)
+  --title-font-size <n>   OG heading font size in px (default: 72)
   --desc-font-size <n>    OG description font size in px (default: 34)
   --og-format <fmt>          OG image output format: png (default: png)
   --og-dots                  Force OG background dot pattern on
