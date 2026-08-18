@@ -72,3 +72,32 @@ test('buildMetaFiles uses generateDir and CLI attribution', () => {
   assert.equal(parsed.theme_color, '#E00069')
   assert.equal(parsed.name, 'Acme')
 })
+
+test('missing primary color falls back to black, not magenta', () => {
+  const brandData = parseBrandFromJson({
+    brand: { siteTitle: { $value: 'Demo', $type: 'string' } },
+    colors: {},
+  })
+  assert.equal(brandData.colors.primary, '#000000')
+
+  const manifest = JSON.parse(buildManifest(brandData).content)
+  assert.equal(manifest.theme_color, '#000000')
+})
+
+test('metaOptions control apple-mobile-web-app-capable', () => {
+  const brandData = parseBrandFromJson(sampleBrand)
+  const refs = {
+    ogImage: 'og-image.png',
+    faviconPrimary: 'favicon.ico',
+    hasFaviconSvg: true,
+  }
+
+  const yesHtml = buildMetaFiles(brandData, refs).find((file) => file.name === 'meta.html').content
+  assert.ok(yesHtml.includes('apple-mobile-web-app-capable" content="yes"'))
+
+  const noHtml = buildMetaFiles(brandData, refs, {
+    metaOptions: { appleWebAppCapable: false },
+  }).find((file) => file.name === 'meta.html').content
+  assert.ok(noHtml.includes('apple-mobile-web-app-capable" content="no"'))
+  assert.ok(noHtml.includes('theme-color: Chrome, Firefox'))
+})
