@@ -34,8 +34,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `--gitignore` flag: appends the output dir and generate dir to `.gitignore` after generation. Skips entries already present. Creates `.gitignore` if it does not exist.
 - SVG accepted as a `--source-logo` input (alongside PNG, JPG, WebP) for all derived outputs (favicon, app icons, OG image).
 - OG image log now shows the actual output filename instead of the hardcoded `og-image.jpg`.
+- WASM rasterizer fallback (`@resvg/resvg-wasm`) when the native `@resvg/resvg-js` addon cannot be loaded (Netlify/esbuild function bundles).
 
 ### Changed
+- SVG rasterization is isolated in `lib/rasterize.js`. Native resvg is required at runtime so bundlers no longer follow `.node` addons.
 - CLI filesystem generators now wrap the in-memory core (single source of truth for parsing, assets, and meta).
 - Generated meta attribution standardized to `uink-brand-cli`.
 - `--logo-bg` default behaviour documented as `auto` (keeps a solid canvas for monochrome/alpha logos). `--full-color` is now the explicit opt-in for transparent icon backgrounds.

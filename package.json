@@ -10,11 +10,12 @@
     ".": "./bin/cli.js",
     "./lib/parser.js": "./lib/parser.js",
     "./lib/generator.js": "./lib/generator.js",
-    "./lib/meta-generator.js": "./lib/meta-generator.js"
+    "./lib/meta-generator.js": "./lib/meta-generator.js",
+    "./lib/rasterize.js": "./lib/rasterize.js"
   },
   "scripts": {
     "test": "npm run test:core",
-    "test:core": "node --test test/core-parity.test.js",
+    "test:core": "node --test test/*.js",
     "test:cli": "node bin/cli.js --brand brand.example.json --force",
     "build:changelog": "node scripts/update-changelog.mjs",
     "prepublishOnly": "echo 'Ready to publish'"
@@ -55,6 +56,7 @@
   ],
   "dependencies": {
     "@resvg/resvg-js": "^2.6.0",
+    "@resvg/resvg-wasm": "^2.6.2",
     "satori": "^0.10.0"
   }
 }

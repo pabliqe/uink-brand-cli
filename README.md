@@ -698,6 +698,13 @@ const metaFiles = buildMetaFiles(brandData, refs, { generateDir: '.uink-brand' }
 - `buildMetaFiles({ generateDir })` controls output path prefix (CLI default `.og-brand`, tokens export `.uink-brand`)
 - OG theme options: `ogOptions.theme` = `primary` | `white` | `dark`
 
+PNG rasterization lives in `uink-brand-cli/lib/rasterize.js`. It never statically imports the native `@resvg/resvg-js` addon (that breaks esbuild / Netlify functions). Native is loaded at runtime; `@resvg/resvg-wasm` is the fallback. For production function zips that omit `node_modules`, still mark the packages external:
+
+```toml
+[functions]
+  external_node_modules = ["@resvg/resvg-js", "@resvg/resvg-wasm"]
+```
+
 ## 🎯 Use Cases
 
 - ✅ Generate branded OG images for social sharing
